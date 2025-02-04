@@ -20,7 +20,7 @@ exports.updateProfile = async (req, res) => {
       { name, email },
       { new: true, runValidators: true }
     ).select('-password');
-    
+
     res.json(user);
   } catch (error) {
     res.status(400).json({ message: error.message });

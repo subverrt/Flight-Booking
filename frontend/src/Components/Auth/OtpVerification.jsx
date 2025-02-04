@@ -10,14 +10,20 @@ const OtpVerification = () => {
   const handleVerify = async () => {
     setLoading(true);
     try {
-      const email = localStorage.getItem('tempEmail'); // Store email during signup
+      const email = localStorage.getItem('tempEmail'); // Ensure this is stored properly
+      console.log("Sending data:", { email, otp }); // Debug log
+  
       const res = await fetch('http://localhost:5000/api/auth/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, otp })
+        body: JSON.stringify({ email, otp }) // Ensure this is correctly formatted
       });
-      
-      if (!res.ok) throw new Error('Verification failed');
+  
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message || 'Verification failed');
+      }
+  
       navigate('/login');
     } catch (err) {
       setError(err.message);
@@ -25,6 +31,7 @@ const OtpVerification = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="auth-container">

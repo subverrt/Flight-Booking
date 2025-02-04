@@ -4,8 +4,10 @@ const { sendOTPEmail } = require('../config/email');
 const generateOTP = require('../utils/generateOTP');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
-// Add all required controller methods
+
+
 exports.signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -20,26 +22,52 @@ exports.signup = async (req, res) => {
   }
 };
 
+
 exports.sendOTP = async (req, res) => {
   try {
     const { email } = req.body;
-    const otp = generateOTP();
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
+    if (!email) return res.status(400).json({ message: "Email is required" });
 
-    await OTP.deleteMany({ email });
-    const newOTP = new OTP({ email, otp, expiresAt });
-    await newOTP.save();
-    await sendOTPEmail(email, otp);
-    
-    res.status(200).json({ message: 'OTP sent successfully' });
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    console.log(`Generated OTP for ${email}: ${otp}`);
+
+    // Save OTP in the database (overwrite existing OTP if any)
+    await OTP.findOneAndUpdate(
+      { email },
+      { otp, expiresAt: Date.now() + 5 * 60 * 1000 }, // Expiry time: 5 mins
+      { upsert: true, new: true }
+    );
+
+    // Send OTP via Email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Your OTP Code",
+      text: `Your OTP is: ${otp}`
+    });
+
+    res.status(200).json({ message: "OTP sent successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error sending OTP:", error);
+    res.status(500).json({ message: "Error sending OTP" });
   }
 };
+
 
 exports.verifyOTP = async (req, res) => {
   try {
     const { email, otp } = req.body;
+
+    // Find OTP record in the database
     const otpRecord = await OTP.findOne({ email });
 
     if (!otpRecord || otpRecord.otp !== otp) {
@@ -50,18 +78,24 @@ exports.verifyOTP = async (req, res) => {
       return res.status(400).json({ message: 'OTP expired' });
     }
 
+    // Update user verification status
     await User.updateOne({ email }, { isVerified: true });
+
+    // Delete OTP record after verification
     await OTP.deleteMany({ email });
+
     res.status(200).json({ message: 'OTP verified successfully' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error verifying OTP:", error);
+    res.status(500).json({ message: "Error verifying OTP" });
   }
 };
 
-// Add this to authController.js
+
+
 exports.verifyToken = (req, res, next) => {
   const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
-  
+
   if (!token) return res.status(401).json({ message: 'Access denied' });
 
   try {
@@ -88,7 +122,7 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.cookie('token', token, { httpOnly: true });
-    res.status(200).json({ 
+    res.status(200).json({
       message: 'Login successful',
       user: { name: user.name, email: user.email }
     });

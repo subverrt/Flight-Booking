@@ -10,21 +10,37 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
-      const res = await fetch('http://localhost:5000/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      
-      if (!res.ok) throw new Error('Signup failed');
-      navigate('/verify-otp');
+        // Signup request
+        const res = await fetch('http://localhost:5000/api/auth/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+
+        if (!res.ok) throw new Error('Signup failed');
+
+        // Send OTP request after signup
+        const otpRes = await fetch('http://localhost:5000/api/auth/send-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: formData.email })
+        });
+
+        if (!otpRes.ok) throw new Error('Failed to send OTP');
+
+        // Store email for verification step
+        localStorage.setItem('tempEmail', formData.email);
+
+        navigate('/verify-otp');
     } catch (err) {
-      setError(err.message);
+        setError(err.message);
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
 
   return (
     <div className="auth-container">
