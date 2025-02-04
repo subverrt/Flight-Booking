@@ -3,12 +3,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
 // Middleware
 app.use(cors({ credentials: true, origin: 'http://localhost:5173' }));
 app.use(express.json());
+app.use(cookieParser()); 
 
 // Database Connection
 mongoose.connect(process.env.MONGODB_URI)
