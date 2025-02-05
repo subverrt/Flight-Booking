@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Auth.css';
 
 const Signup = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
@@ -10,37 +11,47 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
 
     try {
-        // Signup request
-        const res = await fetch('http://localhost:5000/api/auth/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
+      // 1. Signup request
+      const res = await fetch('http://localhost:5000/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
-        if (!res.ok) throw new Error('Signup failed');
+      const data = await res.json();
 
-        // Send OTP request after signup
-        const otpRes = await fetch('http://localhost:5000/api/auth/send-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: formData.email })
-        });
+      if (!res.ok) {
+        throw new Error(data.message || 'Signup failed');
+      }
 
-        if (!otpRes.ok) throw new Error('Failed to send OTP');
+      // 2. Send OTP request after successful signup
+      const otpRes = await fetch('http://localhost:5000/api/auth/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email }),
+      });
 
-        // Store email for verification step
-        localStorage.setItem('tempEmail', formData.email);
+      const otpData = await otpRes.json();
 
-        navigate('/verify-otp');
+      if (!otpRes.ok) {
+        throw new Error(otpData.message || 'Failed to send OTP');
+      }
+
+      // 3. Store email for verification step
+      localStorage.setItem('tempEmail', formData.email);
+
+      // 4. Navigate to OTP verification page
+      navigate('/verify-otp');
     } catch (err) {
-        setError(err.message);
+      console.error('Signup error:', err);
+      setError(err.message);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
-
+  };
 
   return (
     <div className="auth-container">

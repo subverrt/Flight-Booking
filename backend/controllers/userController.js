@@ -36,3 +36,38 @@ exports.deleteAccount = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// controllers/userController.js
+
+// ... existing code ...
+
+// Function to get a user's bookings
+exports.getUserBookings = async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const flights = await Flight.find({ 'bookings.user': userId });
+
+    // Filter and format bookings
+    const bookings = flights.map(flight => {
+      const bookingDetails = flight.bookings.find(booking => booking.user.toString() === userId);
+      return {
+        flight: {
+          airline: flight.airline,
+          flightNumber: flight.flightNumber,
+          departureAirport: flight.departureAirport,
+          arrivalAirport: flight.arrivalAirport,
+          departureTime: flight.departureTime,
+          arrivalTime: flight.arrivalTime,
+        },
+        seats: bookingDetails.seats,
+        bookingDate: bookingDetails.bookingDate,
+      };
+    });
+
+    res.status(200).json({ bookings });
+  } catch (error) {
+    console.error('Error fetching user bookings:', error.message);
+    res.status(500).json({ message: 'Error fetching user bookings' });
+  }
+};

@@ -1,29 +1,39 @@
-import { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../AuthContext';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const { setUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const res = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials)
+        body: JSON.stringify(credentials),
       });
-      
-      if (!res.ok) throw new Error('Login failed');
-      
-      const { token, user } = await res.json();
-      localStorage.setItem('token', token);
-      navigate('/');
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        setUser(data.user);
+        toast.success('Logged in successfully!');
+        navigate('/');
+      } else {
+        toast.error(data.message || 'Login failed');
+      }
     } catch (err) {
-      setError(err.message);
+      console.error('Login error:', err);
+      toast.error('An error occurred during login.');
     } finally {
       setLoading(false);
     }
@@ -50,7 +60,6 @@ const Login = () => {
         <button type="submit" disabled={loading}>
           {loading ? 'Signing In...' : 'Continue'}
         </button>
-        {error && <p className="error">{error}</p>}
       </form>
     </div>
   );

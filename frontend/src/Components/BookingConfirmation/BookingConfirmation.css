@@ -1,0 +1,25 @@
+/* src/Components/BookingConfirmation/BookingConfirmation.css */
+
+/* Booking Confirmation Container */
+.booking-confirmation {
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+  
+  .booking-confirmation h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--PrimaryColor);
+  }
+  
+  .booking-confirmation h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--blackColor);
+  }
+  
+  .booking-confirmation p {
+    margin-bottom: 0.5rem;
+    color: var(--textColor);
+  }
+  

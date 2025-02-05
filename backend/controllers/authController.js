@@ -133,6 +133,7 @@ exports.login = async (req, res) => {
   }
 };
 
+
 exports.getCurrentUser = async (req, res) => {
   try {
     const user = await User.findById(req.userId).select('-password');

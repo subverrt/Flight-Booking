@@ -1,0 +1,61 @@
+/* src/Components/Auth/Auth.css */
+
+/* Global CSS Variables (Ensure these are defined somewhere in your CSS) */
+
+.auth-container {
+  padding: 2rem 1.5rem;
+  max-width: 400px;
+  margin: 120px auto 2rem; /* Adjusted to add top margin */
+  text-align: center;
+}
+
+.auth-container h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--blackColor);
+}
+
+.auth-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-container form input {
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--borderColor);
+  border-radius: 0.5rem;
+  outline: none;
+  font-size: 1rem;
+}
+
+.auth-container form .error {
+  color: red;
+  margin-bottom: 1rem;
+}
+
+.auth-container form button {
+  padding: 0.8rem 1rem;
+  background: var(--PrimaryColor);
+  border: none;
+  border-radius: 0.5rem;
+  color: var(--whiteColor);
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.auth-container form button:hover {
+  background: var(--HoverColor);
+}
+
+.auth-container form button:disabled {
+  background: var(--greyText);
+  cursor: not-allowed;
+}
+
+/* Additional Styles for Responsive Design */
+@media screen and (max-width: 600px) {
+  .auth-container {
+    margin: 100px 1rem 2rem; /* Reduce side margins on smaller screens */
+  }
+}
