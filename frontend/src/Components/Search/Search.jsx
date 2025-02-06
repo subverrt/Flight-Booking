@@ -57,7 +57,7 @@ const Search = () => {
       <div data-aos='fade-up' data-aos-duration='2000' className="sectionContainer grid">
         <form onSubmit={handleSearch}>
           <div className="btns flex">
-            {['ECONOMY', 'PREMIUM_ECONOMY', 'BUSINESS', 'FIRST'].map((classType) => (
+            {['Economy', 'Premium_Economy', 'Business', 'First'].map((classType) => (
               <div
                 key={classType}
                 className={`singleBtn ${travelClass === classType ? 'active' : ''}`}

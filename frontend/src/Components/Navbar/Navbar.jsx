@@ -1,119 +1,123 @@
 // src/Components/Navbar/Navbar.jsx
 import React, { useState, useEffect, useContext } from 'react';
-import { SiConsul } from 'react-icons/si';
-import { BsPhoneVibrate } from 'react-icons/bs';
-import { AiOutlineGlobal } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
-import { AuthContext } from '../../AuthContext'; // Import AuthContext
+import { AuthContext } from '../../AuthContext';
 
 const Navbar = () => {
-  const [active, setActive] = useState('navBarMenu');
-  const [noBg, addBg] = useState('navBarTwo');
-
-  const { user, logout } = useContext(AuthContext); // Access user and logout from AuthContext
+  const [menuActive, setMenuActive] = useState(false);
+  const [navbarBg, setNavbarBg] = useState('');
+  const { user, logout } = useContext(AuthContext);
+  const [showSignout, setShowSignout] = useState(false);
   const navigate = useNavigate();
 
-  // Toggle navbar visibility on mobile devices
-  const showNavBar = () => setActive('navBarMenu showNavBar');
-  const removeNavBar = () => setActive('navBarMenu');
+  // Toggle mobile menu
+  const toggleMenu = () => setMenuActive(!menuActive);
+  const closeMenu = () => setMenuActive(false);
 
-  // Add background color to navbar on scroll
-  const addBgColor = () => {
-    if (window.scrollY >= 10) {
-      addBg('navBarTwo navbar_With_Bg');
-    } else {
-      addBg('navBarTwo');
-    }
+  // Toggle the signout button when clicking on the username
+  const toggleSignout = () => {
+    setShowSignout((prev) => !prev);
   };
-
-  useEffect(() => {
-    window.addEventListener('scroll', addBgColor);
-    return () => {
-      window.removeEventListener('scroll', addBgColor);
-    };
-  }, []);
 
   const handleLogout = () => {
     logout();
     navigate('/');
   };
 
-  return (
-    <div className='navBar flex'>
-      {/* Top Navbar */}
-      <div className="navBarOne flex">
-        <div>
-          <SiConsul className="icon" />
-        </div>
-        <div className='none flex'>
-          <li className='flex'>
-            <BsPhoneVibrate /> Support
-          </li>
-          <li className='flex'>
-            <AiOutlineGlobal /> Languages
-          </li>
-        </div>
-        <div className="atb flex">
-          {user ? (
-            <div className="user-profile flex">
-              <div className="avatar">{user.name.charAt(0).toUpperCase()}</div>
-              <span>Hi, {user.name}</span>
-              <button onClick={handleLogout} className="logout-button">
-                Logout
-              </button>
-            </div>
-          ) : (
-            <>
-              <Link to="/login" className="nav-link">Sign In</Link>
-              <Link to="/signup" className="nav-link">Sign Up</Link>
-            </>
-          )}
-        </div>
-      </div>
+  // Toggle Dark Mode by adding/removing a class on the body
+  const toggleDarkMode = () => {
+    document.body.classList.toggle('dark-mode');
+  };
 
-      {/* Main Navbar */}
-      <div className={noBg}>
+  // Change navbar background on scroll
+  const handleScroll = () => {
+    if (window.scrollY >= 10) {
+      setNavbarBg('navbar_With_Bg');
+    } else {
+      setNavbarBg('');
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div className={`navBar flex ${navbarBg}`}>
+      <div className="navbarInner flex">
+        {/* Logo */}
         <div className="logoDiv">
-          <Link to="/">
-            <img src={logo} className='Logo' alt="Logo" />
+          <Link to="/" onClick={closeMenu}>
+            <img src={logo} className="Logo" alt="Logo" />
           </Link>
         </div>
 
-        <div className={active}>
-          <ul className="menu flex">
-            <li onClick={removeNavBar} className="listItem">
+        {/* Navigation Menu */}
+        <div className={`menu flex ${menuActive ? 'active' : ''}`}>
+          <ul className="menuList flex">
+            <li onClick={closeMenu} className="listItem">
               <Link to="/">Home</Link>
             </li>
-            <li onClick={removeNavBar} className="listItem">
+            <li onClick={closeMenu} className="listItem">
               <Link to="/about">About</Link>
             </li>
-            <li onClick={removeNavBar} className="listItem">
+            <li onClick={closeMenu} className="listItem">
               <Link to="/offers">Offers</Link>
             </li>
-            <li onClick={removeNavBar} className="listItem">
+            <li onClick={closeMenu} className="listItem">
               <Link to="/seats">Seats</Link>
             </li>
-            <li onClick={removeNavBar} className="listItem">
+            <li onClick={closeMenu} className="listItem">
               <Link to="/destinations">Destinations</Link>
             </li>
             {user && (
-              <li onClick={removeNavBar} className="listItem">
+              <li onClick={closeMenu} className="listItem">
                 <Link to="/bookings">My Bookings</Link>
               </li>
             )}
+            <li onClick={closeMenu} className="listItem">
+              <Link to="/contact">Contact</Link>
+            </li>
           </ul>
-          <button onClick={removeNavBar} className='btn flex btnOne'>
-            Contact
-          </button>
         </div>
 
-        <button className='btn flex btnTwo'>
-          Contact
-        </button>
-        <div onClick={showNavBar} className='toggleIcon'>
-          <CgMenuGridO className='icon' />
+        {/* Right Section: Dark Mode toggle & Auth */}
+        <div className="rightSection flex">
+          <button onClick={toggleDarkMode} className="dark-mode-toggle" title="Toggle Dark Mode">
+            🌙
+          </button>
+          <div className="auth flex">
+            {user ? (
+              <div className="userProfile" onClick={toggleSignout}>
+                <div className="avatar">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <span className="userGreeting">Hi, {user.name}</span>
+                {showSignout && (
+                  <button onClick={handleLogout} className="logout-button">
+                    Sign Out
+                  </button>
+                )}
+              </div>
+            ) : (
+              <>
+                <Link to="/login" className="nav-link">
+                  Sign In
+                </Link>
+                <Link to="/signup" className="nav-link">
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <div className="toggleIcon" onClick={toggleMenu}>
+            <CgMenuGridO className="icon" />
+          </div>
         </div>
       </div>
     </div>

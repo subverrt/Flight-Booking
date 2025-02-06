@@ -1,11 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Spartan:wght@100..900&display=swap");
+/* ======================================================
+   Base Variables & Global Styles
+   ====================================================== */
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   scroll-behavior: smooth;
   font-family: Spartan, sans-serif;
-  transition: 0.2s ease;
+  transition: var(--transition);
 }
 
 :root {
@@ -18,20 +21,42 @@
   --blackColor: hsl(0, 0%, 12%);
   --textColor: hsl(240, 1%, 48%);
   --borderColor: hsl(0, 0%, 83%);
-  --whiteColorDeam: hsl(0, 0%, 93%);
   --greyBg: hsl(0, 0%, 96%);
   --greyText: rgb(145, 145, 145);
   --inputColor: hsl(330, 12%, 97%);
-  --boxShadow: box-shadow: rgba(0, 0, 0, .1) 0px 10px 15px -3px, rgba(0, 0, 0, .05) 0px 4px 6px -2px;
-  --transition: .4s ease-in-out ;
+  --boxShadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+  --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --glassEffect: rgba(255, 255, 255, 0);
+  --navBorder: transparent;
+}
+
+.dark-mode {
+  --PrimaryColor: hsl(210, 70%, 55%);
+  --SecondaryColor: hsl(220, 17%, 17%);
+  --colorOne: hsl(15, 85%, 65%);
+  --colorTwo: hsl(28, 100%, 75%);
+  --HoverColor: hsl(210, 70%, 45%);
+  --whiteColor: hsl(220, 17%, 10%);
+  --blackColor: hsl(0, 0%, 95%);
+  --textColor: hsl(0, 0%, 85%);
+  --borderColor: hsl(0, 0%, 25%);
+  --greyBg: hsl(220, 17%, 15%);
+  --greyText: hsl(0, 0%, 75%);
+  --inputColor: hsl(220, 17%, 20%);
+  --boxShadow: rgba(15, 15, 15, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  --glassEffect: rgba(0, 0, 0, 0.1);
+  --navBorder: hsl(0, 0%, 20%);
 }
 
 body {
   background: var(--whiteColor);
+  color: var(--textColor);
+  transition: background-color var(--transition), color var(--transition);
 }
 
 a {
   text-decoration: none;
+  color: inherit;
 }
 
 li {
@@ -44,13 +69,13 @@ li {
 }
 
 .container {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding: 0 1.5rem;
 }
 
 .icon {
   font-size: 1.3rem;
   cursor: pointer;
+  color: var(--blackColor);
 }
 
 .flex {
@@ -75,29 +100,37 @@ li {
   border-radius: 3rem;
   cursor: pointer;
   color: var(--whiteColor);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
-.btn a, .auth-container form button a {
-  color: var(--whiteColor);
-  font-weight: 500;
-}
-
 .btn:hover, .auth-container form button:hover {
   background: var(--HoverColor);
+  transform: translateY(-2px);
+  box-shadow: var(--boxShadow);
 }
-
-.btn:hover a, .auth-container form button:hover a {
+.btn a, .auth-container form button a {
   color: var(--whiteColor);
+  font-weight: 600;
 }
 
-img, video {
+img,
+video {
   width: 100%;
   height: auto;
+  border-radius: 8px;
 }
 
 input {
   font-size: 100%;
-  color: var(--greyText);
+  color: var(--textColor);
+  background: var(--inputColor);
+  border: 1px solid var(--borderColor);
+  border-radius: 8px;
+  padding: 0.8rem;
+  transition: border-color var(--transition);
+}
+input:focus {
+  border-color: var(--PrimaryColor);
+  outline: none;
 }
 
 p {
@@ -109,7 +142,7 @@ p {
 h4 {
   padding: 1rem 0;
   font-weight: 700;
-  color: #000;
+  color: var(--blackColor);
 }
 
 h2 {
@@ -118,66 +151,119 @@ h2 {
   color: var(--blackColor);
 }
 
+/* ======================================================
+   Navbar Component Base Styles
+   ====================================================== */
 .navBar {
-  display: flex;
-  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
-  flex-direction: column;
-  z-index: 1000;
   width: 100%;
-}
-
-.navBar .navBarOne, .navBar .navBarTwo {
-  justify-content: space-between;
-  padding: 1rem;
-  width: 100%;
-}
-
-.navBar .navBarOne {
   background: var(--SecondaryColor);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  border-bottom: 1px solid var(--navBorder);
+  -webkit-backdrop-filter: blur(12px);
+          backdrop-filter: blur(12px);
+  /* Using rgba() to apply transparency */
+  background: rgba(var(--SecondaryColor), 0.8);
 }
-
-.navBar .navBarOne .none {
-  display: none;
+.navBar.navbar_With_Bg {
+  box-shadow: var(--boxShadow);
+  padding: 0.5rem 2rem;
+  background: rgba(var(--SecondaryColor), 0.95);
 }
-
-.navBar .navBarOne .icon:hover {
-  color: var(--PrimaryColor);
+.navBar .navbarInner {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-
-.navBar .navBarOne .atb {
-  gap: 1rem;
+.navBar .navbarInner .logoDiv .Logo {
+  width: 120px;
+  filter: brightness(0.9);
 }
-
-.navBar .navBarOne .atb span {
-  color: var(--blackColor);
-  font-size: 13px;
-  cursor: pointer;
+.navBar .navbarInner .menu {
+  display: flex;
+  align-items: center;
 }
-
-.navBar .navBarOne .atb span:hover {
-  color: var(--PrimaryColor);
-  font-size: 700;
+.navBar .navbarInner .menu ul.menuList {
+  display: flex;
+  gap: 1.5rem;
 }
-
-.navBar .navBarOne .nav-link {
+.navBar .navbarInner .menu ul.menuList li.listItem a {
   color: var(--textColor);
   padding: 0.5rem 1rem;
   border-radius: 3rem;
-  transition: var(--transition);
+  position: relative;
 }
-.navBar .navBarOne .nav-link:hover {
+.navBar .navbarInner .menu ul.menuList li.listItem a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--PrimaryColor);
+  transition: width var(--transition);
+}
+.navBar .navbarInner .menu ul.menuList li.listItem a:hover {
+  color: var(--PrimaryColor);
+  background: transparent;
+}
+.navBar .navbarInner .menu ul.menuList li.listItem a:hover::after {
+  width: 100%;
+}
+@media (max-width: 768px) {
+  .navBar .navbarInner .menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--SecondaryColor);
+    flex-direction: column;
+    display: none;
+    padding: 1rem;
+    box-shadow: var(--boxShadow);
+  }
+  .navBar .navbarInner .menu.active {
+    display: flex;
+  }
+}
+.navBar .navbarInner .rightSection {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.navBar .navbarInner .rightSection .dark-mode-toggle {
   background: var(--PrimaryColor);
   color: var(--whiteColor);
-}
-
-.navBar .navBarOne .user-profile {
-  gap: 1rem;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 3rem;
+  cursor: pointer;
+  display: flex;
   align-items: center;
+  gap: 0.5rem;
 }
-.navBar .navBarOne .user-profile .avatar {
+.navBar .navbarInner .rightSection .dark-mode-toggle:hover {
+  background: var(--HoverColor);
+}
+.navBar .navbarInner .rightSection .auth .userProfile {
+  /* Arrange avatar and greeting in a column */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  gap: 0.3rem;
+}
+.navBar .navbarInner .rightSection .auth .userProfile .avatar {
+  /* Make the avatar fully round with fixed dimensions */
   width: 40px;
   height: 40px;
   background: var(--PrimaryColor);
@@ -187,98 +273,167 @@ h2 {
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  text-transform: uppercase;
+  font-size: 1rem;
+  box-shadow: 0 4px 6px var(--glassEffect);
 }
-.navBar .navBarOne .user-profile button {
-  background: var(--colorOne);
+.navBar .navbarInner .rightSection .auth .userProfile .userGreeting {
+  font-size: 0.85rem;
+  color: var(--textColor);
+}
+.navBar .navbarInner .rightSection .auth .userProfile .logout-button {
+  background: var(--PrimaryColor);
   color: var(--whiteColor);
-  padding: 0.5rem 1rem;
-  border-radius: 3rem;
+  padding: 0.4rem 0.8rem;
   border: none;
+  border-radius: 3rem;
   cursor: pointer;
-  transition: var(--transition);
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+  transition: background var(--transition);
 }
-.navBar .navBarOne .user-profile button:hover {
+.navBar .navbarInner .rightSection .auth .userProfile .logout-button:hover {
   background: var(--HoverColor);
 }
-
-.navBar .navBarTwo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between !important;
-  top: 3rem;
-  padding: 1.5rem 1rem;
-  position: fixed;
-  transition: 0.3s ease-in-out;
+.navBar .navbarInner .rightSection .auth .nav-link {
+  text-decoration: none;
+  color: var(--textColor);
+  padding: 0.5rem 1rem;
+  border-radius: 3rem;
+  transition: var(--transition);
 }
-
-.navBar .navBarTwo .logoDiv .Logo {
-  width: 20%;
+.navBar .navbarInner .rightSection .auth .nav-link:hover {
+  background: var(--PrimaryColor);
+  color: var(--whiteColor);
 }
-
-@media screen and (max-width: 768px) {
-  .navBar .navBarTwo .navBarMenu {
-    position: absolute;
-    background: var(--SecondaryColor);
-    padding: 1.5rem;
-    border-radius: 10px;
-    top: 5rem;
-    right: -50%;
-    width: 80%;
-    transform: translate(50%);
-    z-index: 2000;
-    box-shadow: rgba(0, 0, 0, 0.1019607843) 0 10px 15px -3px, rgba(0, 0, 0, 0.0509803922) 0 4px 6px -2px;
-    border: 3px solid var(--whiteColor);
-    transition: 0.4s ease-in-out;
+.navBar .navbarInner .rightSection .toggleIcon .icon {
+  color: var(--blackColor);
+}
+@media (max-width: 1200px) {
+  .navBar {
+    padding: 1rem;
   }
-  .navBar .navBarTwo .navBarMenu .menu {
+  .navBar .navbarInner {
+    max-width: 100%;
+  }
+  .navBar .navbarInner .menu ul.menuList {
+    gap: 1rem;
+  }
+}
+@media (max-width: 992px) {
+  .navBar .navbarInner .logoDiv .Logo {
+    width: 100px;
+  }
+  .navBar .navbarInner .menu ul.menuList {
+    gap: 0.75rem;
+  }
+  .navBar .navbarInner .menu ul.menuList li.listItem a {
+    padding: 0.5rem;
+  }
+  .navBar .navbarInner .rightSection {
+    gap: 1rem;
+  }
+}
+@media (max-width: 768px) {
+  .navBar {
+    padding: 0.75rem 1rem;
+  }
+  .navBar .navbarInner .logoDiv .Logo {
+    width: 90px;
+  }
+  .navBar .navbarInner .menu {
+    width: 100%;
+    top: calc(100% - 1px);
+    padding: 0;
+  }
+  .navBar .navbarInner .menu ul.menuList {
     flex-direction: column;
-    gap: 0.5rem;
+    width: 100%;
+    padding: 1rem 0;
+    gap: 0;
+  }
+  .navBar .navbarInner .menu ul.menuList li.listItem {
+    width: 100%;
     text-align: center;
-  }
-  .navBar .navBarTwo .navBarMenu .menu .listItem {
     padding: 0.5rem 0;
-    cursor: pointer;
-    color: var(--blackColor);
   }
-  .navBar .navBarTwo .navBarMenu .menu .listItem:hover {
-    color: var(--PrimaryColor);
-    font-weight: 700;
-  }
-  .navBar .navBarTwo .navBarMenu .btnOne {
+  .navBar .navbarInner .menu ul.menuList li.listItem a {
+    width: 100%;
     display: block;
-    justify-content: center;
-    margin: auto;
-    align-self: center;
-    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 0;
   }
-  .navBar .navBarTwo .btnTwo {
+  .navBar .navbarInner .menu ul.menuList li.listItem a::after {
+    display: none;
+  }
+  .navBar .navbarInner .menu ul.menuList li.listItem a:hover {
+    background: var(--PrimaryColor);
+    color: var(--whiteColor);
+  }
+  .navBar .navbarInner .rightSection {
+    gap: 0.75rem;
+  }
+  .navBar .navbarInner .rightSection .dark-mode-toggle {
+    padding: 0.5rem;
+  }
+  .navBar .navbarInner .rightSection .dark-mode-toggle span {
+    display: none;
+  }
+  .navBar .navbarInner .rightSection .auth .userProfile .userGreeting {
+    display: none;
+  }
+  .navBar .navbarInner .rightSection .auth .userProfile .logout-button {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.5rem;
+  }
+  .navBar .navbarInner .rightSection .auth .nav-link {
+    padding: 0.5rem;
+  }
+  .navBar .navbarInner .rightSection .toggleIcon .icon {
+    font-size: 1.5rem;
+  }
+}
+@media (max-width: 480px) {
+  .navBar {
+    padding: 0.5rem;
+  }
+  .navBar .navbarInner .logoDiv .Logo {
+    width: 80px;
+  }
+  .navBar .navbarInner .rightSection {
+    gap: 0.5rem;
+  }
+  .navBar .navbarInner .rightSection .auth .userProfile .avatar {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+  }
+  .navBar .navbarInner .rightSection .auth .nav-link {
+    font-size: 0.85rem;
+    padding: 0.4rem;
+  }
+  .navBar .navbarInner .rightSection .toggleIcon .icon {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .navBar .navbarInner .rightSection .dark-mode-toggle {
+    padding: 0.4rem;
+  }
+  .navBar .navbarInner .rightSection .auth .nav-link {
+    font-size: 0.8rem;
+  }
+}
+/* ------------------------------------------------------
+     Hide mobile menu toggle (the .toggleIcon) on large screens
+     ------------------------------------------------------ */
+@media (min-width: 769px) {
+  .toggleIcon {
     display: none;
   }
 }
-.navBar .navBarTwo .showNavBar {
-  right: 50%;
-  transition: 0.5s ease-in-out;
-}
-
-.navBar .navBarTwo .toggleIcon .icon {
-  font-size: 30px;
-  color: var(--blackColor);
-}
-
-.navBar .activeHeader {
-  background: var(--SecondaryColor);
-  padding: 0.5rem 1rem;
-  box-shadow: rgba(0, 0, 0, 0.1019607843) 0 10px 15px -3px, rgba(0, 0, 0, 0.0509803922) 0 4px 6px -2px;
-}
-
-.navBar .navbar_With_Bg {
-  background: var(--SecondaryColor);
-  padding: 0.5rem 1rem;
-  padding-bottom: 0;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
-}
-
 .home {
   padding-top: 10rem;
   text-align: center;
@@ -318,93 +473,125 @@ h2 {
 
 .search .sectionContainer {
   width: 100%;
-  padding: 1.5rem;
+  padding: 2rem;
   border: 2px solid var(--greyBg);
   border-radius: 16px;
-  row-gap: 2rem;
-}
-
-.search .sectionContainer .btns {
-  background: var(--SecondaryColor);
-  padding: 0.5rem;
-  border-radius: 1rem;
+  display: flex;
   flex-direction: column;
+  gap: 1.5rem;
+}
+.search .btns {
+  background: var(--SecondaryColor);
+  padding: 0.8rem 1rem;
+  border-radius: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
   width: 100%;
   margin: auto;
 }
-
-.search .sectionContainer .btns .singleBtn {
+.search .btns .singleBtn {
   padding: 0.8rem 1.5rem;
-  font-size: 13px;
-  border-radius: 3rem;
-  width: 80%;
+  font-size: 14px;
+  border-radius: 2rem;
   text-align: center;
+  cursor: pointer;
 }
-
-.search .sectionContainer .btns .singleBtn:hover {
+.search .btns .singleBtn:hover {
   background: var(--PrimaryColor);
   color: var(--whiteColor);
   font-weight: 500;
   transition: 0.4s ease;
 }
-
-.search .sectionContainer .btns .active {
+.search .btns .active {
   background: var(--PrimaryColor);
   color: var(--whiteColor);
   font-weight: 500;
 }
-
-.search .sectionContainer .searchInputs {
+.search .searchInputs {
   width: 100%;
-  justify-content: center;
-  flex-direction: column;
+  display: grid;
   gap: 1.5rem;
 }
-
-.search .sectionContainer .searchInputs .singleInput .iconDiv {
-  padding: 16px 10px;
-  border-radius: 3rem;
+.search .searchInputs .singleInput {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.search .searchInputs .singleInput .iconDiv {
+  padding: 0.8rem;
   background: var(--SecondaryColor);
-  margin-right: 1rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
-.search .sectionContainer .searchInputs .singleInput .iconDiv .icon {
+.search .searchInputs .singleInput .iconDiv .icon {
   color: var(--blackColor);
-  opacity: 0.7;
+  font-size: 1.2rem;
 }
-
-.search .sectionContainer .searchInputs .singleInput .texts h4 {
-  padding-top: 0;
-  padding-bottom: 0.7rem;
+.search .searchInputs .singleInput .texts {
+  flex: 1;
+}
+.search .searchInputs .singleInput .texts h4 {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
   color: var(--blackColor);
-  font-weight: 700;
 }
-
-.search .sectionContainer .searchInputs .singleInput .texts input {
-  width: 95%;
+.search .searchInputs .singleInput .texts input {
+  width: 100%;
   border: none;
   outline: none;
   background: transparent;
+  font-size: 1rem;
+  padding: 0.5rem;
 }
-
-.search .sectionContainer .searchInputs .singleInput .texts input::-moz-placeholder {
-  font-size: 12px;
-  opacity: 0.5;
+.search .searchInputs .singleInput .texts input::-moz-placeholder {
+  opacity: 0.7;
 }
-
-.search .sectionContainer .searchInputs .singleInput .texts input::placeholder {
-  font-size: 12px;
-  opacity: 0.5;
+.search .searchInputs .singleInput .texts input::placeholder {
+  opacity: 0.7;
 }
-
-.search .sectionContainer .btnBlock {
-  width: 100%;
-  justify-content: center;
-  gap: 0.5rem;
+@media screen and (max-width: 768px) {
+  .search .searchInputs {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .search .btns {
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
 }
-
-.support .sectionContainer .titlesDiv {
-  text-align: center;
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .search .searchInputs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .search .btns {
+    width: 100%;
+  }
+}
+@media screen and (min-width: 1024px) {
+  .search .searchInputs {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .search .btns {
+    width: 60%;
+    margin: auto;
+  }
+}
+@media screen and (min-width: 1106px) {
+  .search .sectionContainer {
+    padding: 2rem;
+  }
+  .search .searchInputs {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+@media screen and (min-width: 1332px) {
+  .search .searchInputs {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2rem;
+  }
 }
 
 .support .sectionContainer .titlesDiv small {
@@ -464,8 +651,11 @@ h2 {
 }
 
 .info .infoContainer .cardsDiv {
+  display: flex; /* Restored flex display */
+  flex-wrap: wrap; /* Allows cards to wrap on smaller screens */
   gap: 1.5rem;
   margin-top: 3rem;
+  justify-content: center; /* Centers the cards horizontally */
 }
 
 .info .infoContainer .cardsDiv .singleCard {
@@ -478,6 +668,7 @@ h2 {
   height: 320px;
   width: 90%;
   max-width: 250px;
+  box-sizing: border-box;
 }
 
 .info .infoContainer .cardsDiv .singleCard .iconDiv {
@@ -508,6 +699,12 @@ h2 {
   background: var(--colorTwo);
 }
 
+/* Media Query to hide paragraph text on smaller screens */
+@media screen and (max-width: 600px) {
+  .info .infoContainer .cardsDiv .singleCard p {
+    display: none;
+  }
+}
 .lounge .sectionContainer {
   gap: 1.5rem;
 }
@@ -554,7 +751,9 @@ h2 {
   height: 320px;
 }
 
-.travelers .sectionContainer .travelersContainer .singleTraveler .destinationImage, .travelers .sectionContainer .travelersContainer .singleTraveler .travelerImage, .travelers .sectionContainer .travelersContainer .singleTraveler .travelerName {
+.travelers .sectionContainer .travelersContainer .singleTraveler .destinationImage,
+.travelers .sectionContainer .travelersContainer .singleTraveler .travelerImage,
+.travelers .sectionContainer .travelersContainer .singleTraveler .travelerName {
   position: absolute;
 }
 
@@ -792,10 +991,6 @@ h2 {
   .home {
     padding-top: 12rem;
   }
-  .search .sectionContainer .searchInputs {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
   .travelers .sectionContainer .travelersContainer {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -827,25 +1022,8 @@ h2 {
     width: 95%;
     top: -8%;
   }
-  .search .sectionContainer .btns {
-    border-radius: 3rem;
-    flex-direction: row;
-  }
-  .search .sectionContainer .searchInputs {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .support .sectionContainer .infoDiv .textDiv {
     margin-top: 2rem;
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .info .infoContainer .titleDiv {
-    flex-direction: row;
-  }
-  .info .infoContainer .titleDiv h2 {
-    text-align: left;
-    max-width: 500px;
-  }
-  .info .infoContainer .cardsDiv, .lounge .sectionContainer .textDiv .grids {
     grid-template-columns: repeat(2, 1fr);
   }
   .subscribe .sectionContainer {
@@ -869,7 +1047,8 @@ h2 {
   }
 }
 @media screen and (min-width: 680px) {
-  .home .mainText, .home .homeImages .videoDiv {
+  .home .mainText,
+  .home .homeImages .videoDiv {
     width: 80%;
   }
   .home .homeImages .videoDiv .video {
@@ -882,13 +1061,6 @@ h2 {
     width: 95%;
     top: -8%;
   }
-  .search .sectionContainer .btns {
-    border-radius: 3rem;
-    flex-direction: row;
-  }
-  .search .sectionContainer .searchInputs {
-    grid-template-columns: repeat(3, 1fr);
-  }
   .footer .sectionContainer {
     padding-top: 2rem;
     align-items: flex-start;
@@ -896,65 +1068,6 @@ h2 {
   }
 }
 @media screen and (min-width: 768px) {
-  .navBar {
-    align-items: center;
-  }
-  .navBar .navBarOne .none {
-    display: flex;
-    gap: 1.5rem;
-  }
-  .navBar .navBarOne .none li {
-    font-size: 13px;
-    gap: 0.5rem;
-    color: var(--textColor);
-  }
-  .navBar .navBarOne .none li:hover {
-    color: var(--PrimaryColor);
-    text-decoration: underline;
-  }
-  .navBar .navBarTwo {
-    justify-content: space-between;
-    align-items: center;
-  }
-  .navBar .navBarTwo .logoDiv .Logo {
-    max-width: 20%;
-  }
-  .navBar .navBarTwo .menu {
-    flex-direction: row;
-    gap: 0.5rem;
-  }
-  .navBar .navBarTwo .menu .listItem {
-    padding: 0 0.5rem;
-    font-size: 14px;
-  }
-  .navBar .navBarTwo .menu .listItem {
-    padding: 0 0.5rem;
-    font-size: 14px;
-    cursor: pointer;
-    color: var(--textColor);
-    font-weight: 700;
-  }
-  .navBar .navBarTwo .menu .listItem:hover {
-    color: var(--PrimaryColor);
-    font-weight: 700;
-  }
-  .navBar .navBarTwo .btnOne, .navBar .navBarTwo .toggleIcon {
-    display: none;
-  }
-  .navBar .navBarTwo .btnTwo {
-    display: block;
-  }
-  .search .sectionContainer .btns {
-    width: 70%;
-    border-radius: 3rem;
-    flex-direction: row;
-  }
-  .search .sectionContainer .searchInputs {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  .search .sectionContainer .searchInputs .singleInput .texts input {
-    width: 100%;
-  }
   .support .sectionContainer .infoDiv {
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
@@ -963,21 +1076,6 @@ h2 {
   .support .sectionContainer .infoDiv .textDiv {
     margin-top: 0rem;
     grid-template-columns: repeat(1, 1fr);
-  }
-  .info .infoContainer {
-    padding: 0 6rem;
-  }
-  .info .infoContainer .titleDiv {
-    width: 90%;
-    margin: auto;
-    align-items: center;
-  }
-  .info .infoContainer .cardsDiv {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .info .infoContainer .cardsDiv .singleCard {
-    max-width: 260px;
-    padding: 3rem;
   }
   .lounge .sectionContainer {
     grid-template-columns: repeat(2, 1fr);
@@ -1019,9 +1117,6 @@ h2 {
     font-size: 22px;
     line-height: 4rem;
   }
-  .search .sectionContainer .searchInputs {
-    grid-template-columns: repeat(5, 1fr);
-  }
   .travelers .sectionContainer .travelersContainer {
     margin: 3rem 0;
     grid-template-columns: repeat(4, 1fr);
@@ -1048,16 +1143,6 @@ h2 {
   .section {
     padding: 6rem 0 4rem;
   }
-  .navBar .navBarOne, .navBar .navBarTwo {
-    padding: 1.5rem 5rem;
-  }
-  .navBar .navBarTwo {
-    padding-bottom: 0;
-    padding-top: 0;
-  }
-  .navBar .activeHeader {
-    padding: 0 5rem;
-  }
   .home .mainText {
     width: 60%;
     padding-bottom: 1.5rem;
@@ -1079,9 +1164,6 @@ h2 {
     position: absolute;
     width: 100%;
     top: -10%;
-  }
-  .search .sectionContainer .btns {
-    width: 50%;
   }
 }
 @media screen and (min-width: 1106px) {
@@ -1105,19 +1187,6 @@ h2 {
   }
 }
 @media screen and (min-width: 1332px) {
-  .navBar .navBarTwo .menu {
-    gap: 1rem;
-  }
-  .navBar .navBarTwo .menu .listItem {
-    padding: 0 1rem;
-    font-size: 14px;
-  }
-  .navBar .navBarTwo .btnOne, .navBar .navBarTwo .toggleIcon {
-    display: none;
-  }
-  .navBar .navBarTwo .btnTwo {
-    display: block;
-  }
   .home .homeImages .plane {
     position: absolute;
     width: 100%;

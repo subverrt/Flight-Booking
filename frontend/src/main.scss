@@ -1,12 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Spartan:wght@100..900&display=swap');
 
+/* ======================================================
+   Base Variables & Global Styles
+   ====================================================== */
+
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     scroll-behavior: smooth;
-    font-family: Spartan,sans-serif;
-    transition: .2s ease
+    font-family: Spartan, sans-serif;
+    transition: var(--transition);
 }
 
 :root {
@@ -19,277 +23,487 @@
     --blackColor: hsl(0, 0%, 12%);
     --textColor: hsl(240, 1%, 48%);
     --borderColor: hsl(0, 0%, 83%);
-    --whiteColorDeam: hsl(0, 0%, 93%);
     --greyBg: hsl(0, 0%, 96%);
     --greyText: rgb(145, 145, 145);
     --inputColor: hsl(330, 12%, 97%);
-    --boxShadow: box-shadow: rgba(0, 0, 0, .1) 0px 10px 15px -3px, rgba(0, 0, 0, .05) 0px 4px 6px -2px;
-    --transition: .4s ease-in-out
+    --boxShadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+    --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --glassEffect: rgba(255, 255, 255, 0);
+    --navBorder: transparent;
+}
+
+.dark-mode {
+    --PrimaryColor: hsl(210, 70%, 55%);
+    --SecondaryColor: hsl(220, 17%, 17%);
+    --colorOne: hsl(15, 85%, 65%);
+    --colorTwo: hsl(28, 100%, 75%);
+    --HoverColor: hsl(210, 70%, 45%);
+    --whiteColor: hsl(220, 17%, 10%);
+    --blackColor: hsl(0, 0%, 95%);
+    --textColor: hsl(0, 0%, 85%);
+    --borderColor: hsl(0, 0%, 25%);
+    --greyBg: hsl(220, 17%, 15%);
+    --greyText: hsl(0, 0%, 75%);
+    --inputColor: hsl(220, 17%, 20%);
+    --boxShadow: rgba(15, 15, 15, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    --glassEffect: rgba(0, 0, 0, 0.1);
+    --navBorder: hsl(0, 0%, 20%);
 }
 
 body {
-    background: var(--whiteColor)
+    background: var(--whiteColor);
+    color: var(--textColor);
+    transition: background-color var(--transition), color var(--transition);
 }
 
 a {
-    text-decoration: none
+    text-decoration: none;
+    color: inherit;
 }
 
 li {
     list-style: none;
-    cursor: pointer
+    cursor: pointer;
 }
 
 .section {
-    padding: 4rem 0 2rem
+    padding: 4rem 0 2rem;
 }
 
 .container {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem
+    padding: 0 1.5rem;
 }
 
 .icon {
     font-size: 1.3rem;
-    cursor: pointer
+    cursor: pointer;
+    color: var(--blackColor);
 }
 
 .flex {
     display: flex;
-    align-items: center
+    align-items: center;
 }
 
 .grid {
     display: grid;
-    align-items: center
+    align-items: center;
 }
 
 .none {
-    display: none
+    display: none;
 }
 
 .btn {
-    padding: .7rem 1.5rem;
+    padding: 0.7rem 1.5rem;
     background: var(--PrimaryColor);
     border: none;
     outline: none;
     border-radius: 3rem;
     cursor: pointer;
-    color: var(--whiteColor)
-}
-
-.btn a {
     color: var(--whiteColor);
-    font-weight: 500
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        background: var(--HoverColor);
+        transform: translateY(-2px);
+        box-shadow: var(--boxShadow);
+    }
+
+    a {
+        color: var(--whiteColor);
+        font-weight: 600;
+    }
 }
 
-.btn:hover {
-    background: var(--HoverColor)
-}
-
-.btn:hover a {
-    color: var(--whiteColor)
-}
-
-img,video {
+img,
+video {
     width: 100%;
-    height: auto
+    height: auto;
+    border-radius: 8px;
 }
 
 input {
     font-size: 100%;
-    color: var(--greyText)
+    color: var(--textColor);
+    background: var(--inputColor);
+    border: 1px solid var(--borderColor);
+    border-radius: 8px;
+    padding: 0.8rem;
+    transition: border-color var(--transition);
+
+    &:focus {
+        border-color: var(--PrimaryColor);
+        outline: none;
+    }
 }
 
 p {
     font-size: 13px;
     color: var(--greyText);
-    line-height: 22px
+    line-height: 22px;
 }
 
 h4 {
     padding: 1rem 0;
     font-weight: 700;
-    color: #000
+    color: var(--blackColor);
 }
 
 h2 {
     font-size: 25px;
     padding: 1rem 0;
-    color: var(--blackColor)
+    color: var(--blackColor);
 }
 
+/* ======================================================
+   Navbar Component Base Styles
+   ====================================================== */
+
 .navBar {
-    display: flex;
-    align-items: center;
     position: fixed;
     top: 0;
     left: 0;
-    flex-direction: column;
-    z-index: 1000;
-    width: 100%
-}
-
-.navBar .navBarOne,.navBar .navBarTwo {
-    justify-content: space-between;
-    padding: 1rem;
-    width: 100%
-}
-
-.navBar .navBarOne {
-    background: var(--SecondaryColor)
-}
-
-.navBar .navBarOne .none {
-    display: none
-}
-
-.navBar .navBarOne .icon:hover {
-    color: var(--PrimaryColor)
-}
-
-.navBar .navBarOne .atb {
-    gap: 1rem
-}
-
-.navBar .navBarOne .atb span {
-    color: var(--blackColor);
-    font-size: 13px;
-    cursor: pointer
-}
-
-.navBar .navBarOne .atb span:hover {
-    color: var(--PrimaryColor);
-    font-size: 700
-}
-
-.navBar .navBarOne .nav-link {
-    color: var(--textColor);
-    padding: 0.5rem 1rem;
-    border-radius: 3rem;
-    transition: var(--transition);
-    
-    &:hover {
-      background: var(--PrimaryColor);
-      color: var(--whiteColor);
-    }
-}
-
-.navBar .navBarOne .user-profile {
-    gap: 1rem;
-    align-items: center;
-    
-    .avatar {
-      width: 40px;
-      height: 40px;
-      background: var(--PrimaryColor);
-      color: var(--whiteColor);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-  
-    button {
-      background: var(--colorOne);
-      color: var(--whiteColor);
-      padding: 0.5rem 1rem;
-      border-radius: 3rem;
-      border: none;
-      cursor: pointer;
-      transition: var(--transition);
-  
-      &:hover {
-        background: var(--HoverColor);
-      }
-    }
-}
-
-
-.navBar .navBarTwo {
+    width: 100%;
+    background: var(--SecondaryColor);
+    padding: 1rem 2rem;
     display: flex;
     align-items: center;
-    justify-content: space-between!important;
-    top: 3rem;
-    padding: 1.5rem 1rem;
-    position: fixed;
-    transition: .3s ease-in-out
-}
+    justify-content: center;
+    z-index: 1000;
+    border-bottom: 1px solid var(--navBorder);
+    backdrop-filter: blur(12px);
+    /* Using rgba() to apply transparency */
+    background: rgba(var(--SecondaryColor), 0.8);
 
-.navBar .navBarTwo .logoDiv .Logo {
-    width: 20%
-}
-
-@media screen and (max-width: 768px) {
-    .navBar .navBarTwo .navBarMenu {
-        position:absolute;
-        background: var(--SecondaryColor);
-        padding: 1.5rem;
-        border-radius: 10px;
-        top: 5rem;
-        right: -50%;
-        width: 80%;
-        transform: translate(50%);
-        z-index: 2000;
-        box-shadow: #0000001a 0 10px 15px -3px,#0000000d 0 4px 6px -2px;
-        border: 3px solid var(--whiteColor);
-        transition: .4s ease-in-out
+    &.navbar_With_Bg {
+        box-shadow: var(--boxShadow);
+        padding: 0.5rem 2rem;
+        background: rgba(var(--SecondaryColor), 0.95);
     }
 
-    .navBar .navBarTwo .navBarMenu .menu {
-        flex-direction: column;
-        gap: .5rem;
-        text-align: center
+    .navbarInner {
+        width: 100%;
+        max-width: 1200px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .logoDiv .Logo {
+            width: 120px;
+            filter: brightness(0.9);
+        }
+
+        .menu {
+            display: flex;
+            align-items: center;
+
+            ul.menuList {
+                display: flex;
+                gap: 1.5rem;
+
+                li.listItem a {
+                    color: var(--textColor);
+                    padding: 0.5rem 1rem;
+                    border-radius: 3rem;
+                    position: relative;
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        width: 0;
+                        height: 2px;
+                        background: var(--PrimaryColor);
+                        transition: width var(--transition);
+                    }
+
+                    &:hover {
+                        color: var(--PrimaryColor);
+                        background: transparent;
+
+                        &::after {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+
+            @media (max-width: 768px) {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--SecondaryColor);
+                flex-direction: column;
+                display: none;
+                padding: 1rem;
+                box-shadow: var(--boxShadow);
+
+                &.active {
+                    display: flex;
+                }
+            }
+        }
+
+        .rightSection {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+
+            .dark-mode-toggle {
+                background: var(--PrimaryColor);
+                color: var(--whiteColor);
+                border: none;
+                padding: 0.6rem 1.2rem;
+                border-radius: 3rem;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+
+                &:hover {
+                    background: var(--HoverColor);
+                }
+            }
+
+            .auth {
+                .userProfile {
+                    /* Arrange avatar and greeting in a column */
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    cursor: pointer;
+                    position: relative;
+                    gap: 0.3rem;
+
+                    .avatar {
+                        /* Make the avatar fully round with fixed dimensions */
+                        width: 40px;
+                        height: 40px;
+                        background: var(--PrimaryColor);
+                        color: var(--whiteColor);
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: 700;
+                        font-size: 1rem;
+                        box-shadow: 0 4px 6px var(--glassEffect);
+                    }
+
+                    .userGreeting {
+                        font-size: 0.85rem;
+                        color: var(--textColor);
+                    }
+
+                    .logout-button {
+                        background: var(--PrimaryColor);
+                        color: var(--whiteColor);
+                        padding: 0.4rem 0.8rem;
+                        border: none;
+                        border-radius: 3rem;
+                        cursor: pointer;
+                        font-size: 0.9rem;
+                        margin-top: 0.3rem;
+                        transition: background var(--transition);
+
+                        &:hover {
+                            background: var(--HoverColor);
+                        }
+                    }
+                }
+
+                .nav-link {
+                    text-decoration: none;
+                    color: var(--textColor);
+                    padding: 0.5rem 1rem;
+                    border-radius: 3rem;
+                    transition: var(--transition);
+
+                    &:hover {
+                        background: var(--PrimaryColor);
+                        color: var(--whiteColor);
+                    }
+                }
+            }
+
+            .toggleIcon .icon {
+                color: var(--blackColor);
+            }
+        }
     }
 
-    .navBar .navBarTwo .navBarMenu .menu .listItem {
-        padding: .5rem 0;
-        cursor: pointer;
-        color: var(--blackColor)
+    @media (max-width: 1200px) {
+        padding: 1rem;
+
+        .navbarInner {
+            max-width: 100%;
+
+            .menu ul.menuList {
+                gap: 1rem;
+            }
+        }
     }
 
-    .navBar .navBarTwo .navBarMenu .menu .listItem:hover {
-        color: var(--PrimaryColor);
-        font-weight: 700
+    @media (max-width: 992px) {
+        .navbarInner {
+            .logoDiv .Logo {
+                width: 100px;
+            }
+
+            .menu ul.menuList {
+                gap: 0.75rem;
+
+                li.listItem a {
+                    padding: 0.5rem;
+                }
+            }
+
+            .rightSection {
+                gap: 1rem;
+            }
+        }
     }
 
-    .navBar .navBarTwo .navBarMenu .btnOne {
-        display: block;
-        justify-content: center;
-        margin: auto;
-        align-self: center;
-        margin-top: 1rem
+    @media (max-width: 768px) {
+        padding: 0.75rem 1rem;
+
+        .navbarInner {
+            .logoDiv .Logo {
+                width: 90px;
+            }
+
+            .menu {
+                width: 100%;
+                top: calc(100% - 1px);
+                padding: 0;
+
+                ul.menuList {
+                    flex-direction: column;
+                    width: 100%;
+                    padding: 1rem 0;
+                    gap: 0;
+
+                    li.listItem {
+                        width: 100%;
+                        text-align: center;
+                        padding: 0.5rem 0;
+
+                        a {
+                            width: 100%;
+                            display: block;
+                            padding: 1rem;
+                            border-radius: 0;
+
+                            &::after {
+                                display: none;
+                            }
+
+                            &:hover {
+                                background: var(--PrimaryColor);
+                                color: var(--whiteColor);
+                            }
+                        }
+                    }
+                }
+            }
+
+            .rightSection {
+                gap: 0.75rem;
+
+                .dark-mode-toggle {
+                    padding: 0.5rem;
+
+                    span {
+                        display: none;
+                    }
+                }
+
+                .auth {
+                    .userProfile {
+                        .userGreeting {
+                            display: none;
+                        }
+
+                        .logout-button {
+                            position: absolute;
+                            top: 100%;
+                            right: 0;
+                            margin-top: 0.5rem;
+                        }
+                    }
+
+                    .nav-link {
+                        padding: 0.5rem;
+                    }
+                }
+
+                .toggleIcon .icon {
+                    font-size: 1.5rem;
+                }
+            }
+        }
     }
 
-    .navBar .navBarTwo .btnTwo {
-        display: none
+    @media (max-width: 480px) {
+        padding: 0.5rem;
+
+        .navbarInner {
+            .logoDiv .Logo {
+                width: 80px;
+            }
+
+            .rightSection {
+                gap: 0.5rem;
+
+                .auth {
+                    .userProfile .avatar {
+                        width: 35px;
+                        height: 35px;
+                        font-size: 0.9rem;
+                    }
+
+                    .nav-link {
+                        font-size: 0.85rem;
+                        padding: 0.4rem;
+                    }
+                }
+
+                .toggleIcon .icon {
+                    font-size: 1.3rem;
+                }
+            }
+        }
     }
 }
 
-.navBar .navBarTwo .showNavBar {
-    right: 50%;
-    transition: .5s ease-in-out
+@media (max-width: 360px) {
+    .navBar {
+        .navbarInner {
+            .rightSection {
+                .dark-mode-toggle {
+                    padding: 0.4rem;
+                }
+
+                .auth .nav-link {
+                    font-size: 0.8rem;
+                }
+            }
+        }
+    }
 }
 
-.navBar .navBarTwo .toggleIcon .icon {
-    font-size: 30px;
-    color: var(--blackColor)
+/* ------------------------------------------------------
+     Hide mobile menu toggle (the .toggleIcon) on large screens
+     ------------------------------------------------------ */
+@media (min-width: 769px) {
+    .toggleIcon {
+        display: none;
+    }
 }
 
-.navBar .activeHeader {
-    background: var(--SecondaryColor);
-    padding: .5rem 1rem;
-    box-shadow: #0000001a 0 10px 15px -3px,#0000000d 0 4px 6px -2px
-}
-
-.navBar .navbar_With_Bg{
-    background: var(--SecondaryColor);
-    padding: .5rem 1rem;
-    padding-bottom: 0;
-    box-shadow: rgba(0,0,0,0.1) 0px 10px 15px -3px, rgba(0,0,0,0.05) 0px 4px 6px -2px;
-}
 
 .home {
     padding-top: 10rem;
@@ -328,93 +542,155 @@ h2 {
     top: -10%
 }
 
-.search .sectionContainer {
-    width: 100%;
-    padding: 1.5rem;
-    border: 2px solid var(--greyBg);
-    border-radius: 16px;
-    row-gap: 2rem
-}
+.search {
+    .sectionContainer {
+        width: 100%;
+        padding: 2rem;
+        border: 2px solid var(--greyBg);
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem; // Spacing between rows
+    }
 
-.search .sectionContainer .btns {
-    background: var(--SecondaryColor);
-    padding: .5rem;
-    border-radius: 1rem;
-    flex-direction: column;
-    width: 100%;
-    margin: auto
-}
+    .btns {
+        background: var(--SecondaryColor);
+        padding: 0.8rem 1rem;
+        border-radius: 3rem;
+        display: flex;
+        flex-wrap: wrap; // Allow wrapping of buttons
+        justify-content: center;
+        gap: 1rem;
+        width: 100%;
+        margin: auto;
 
-.search .sectionContainer .btns .singleBtn {
-    padding: .8rem 1.5rem;
-    font-size: 13px;
-    border-radius: 3rem;
-    width: 80%;
-    text-align: center;
-}
+        .singleBtn {
+            padding: 0.8rem 1.5rem;
+            font-size: 14px;
+            border-radius: 2rem;
+            text-align: center;
+            cursor: pointer;
 
-.search .sectionContainer .btns .singleBtn{
-    &:hover{
-        background: var(--PrimaryColor);
-        color: var(--whiteColor);
-        font-weight: 500;
-        transition: .4s ease;
+            &:hover {
+                background: var(--PrimaryColor);
+                color: var(--whiteColor);
+                font-weight: 500;
+                transition: 0.4s ease;
+            }
+        }
+
+        .active {
+            background: var(--PrimaryColor);
+            color: var(--whiteColor);
+            font-weight: 500;
+        }
+    }
+
+    .searchInputs {
+        width: 100%;
+        display: grid; // Use grid for better alignment
+        gap: 1.5rem; // Space between inputs
+
+        .singleInput {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            .iconDiv {
+                padding: 0.8rem;
+                background: var(--SecondaryColor);
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .icon {
+                    color: var(--blackColor);
+                    font-size: 1.2rem;
+                }
+            }
+
+            .texts {
+                flex: 1;
+
+                h4 {
+                    margin-bottom: 0.5rem;
+                    font-weight: bold;
+                    color: var(--blackColor);
+                }
+
+                input {
+                    width: 100%;
+                    border: none;
+                    outline: none;
+                    background: transparent;
+                    font-size: 1rem;
+                    padding: 0.5rem;
+                }
+
+                input::placeholder {
+                    opacity: 0.7;
+                }
+            }
+        }
+    }
+
+    ////////// Media Queries //////////
+
+    @media screen and (max-width: 768px) {
+        .searchInputs {
+            grid-template-columns: repeat(1, 1fr); // Stack inputs in one column
+        }
+
+        .btns {
+            flex-wrap: wrap; // Ensure buttons wrap if they overflow
+            margin-top: 1rem;
+        }
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+        .searchInputs {
+            grid-template-columns: repeat(2, 1fr); // Two inputs per row
+        }
+
+        .btns {
+            width: 100%; // Ensure buttons fit in the container
+        }
+    }
+
+    @media screen and (min-width: 1024px) {
+        .searchInputs {
+            grid-template-columns: repeat(4, 1fr); // Four inputs per row on larger screens
+        }
+
+        .btns {
+            width: 60%; // Center-align the buttons
+            margin: auto;
+        }
+    }
+
+
+
+    // 1106px: (Optional) Maintain a 5-column layout; you can adjust padding if needed
+    @media screen and (min-width: 1106px) {
+        .sectionContainer {
+            padding: 2rem; // keeping consistent
+        }
+
+        .searchInputs {
+            grid-template-columns: repeat(5, 1fr);
+        }
+    }
+
+    // 1332px: (Optional) For larger screens, you can adjust gap spacing if needed
+    @media screen and (min-width: 1332px) {
+        .searchInputs {
+            grid-template-columns: repeat(5, 1fr); // remains 5 columns
+            gap: 2rem; // ensure consistent spacing
+        }
     }
 }
 
-.search .sectionContainer .btns .active {
-    background: var(--PrimaryColor);
-    color: var(--whiteColor);
-    font-weight: 500
-}
-
-.search .sectionContainer .searchInputs {
-    width: 100%;
-    justify-content: center;
-    flex-direction: column;
-    gap: 1.5rem
-}
-
-.search .sectionContainer .searchInputs .singleInput .iconDiv {
-    padding: 16px 10px;
-    border-radius: 3rem;
-    background: var(--SecondaryColor);
-    margin-right: 1rem
-}
-
-.search .sectionContainer .searchInputs .singleInput .iconDiv .icon {
-    color: var(--blackColor);
-    opacity: .7
-}
-
-.search .sectionContainer .searchInputs .singleInput .texts h4 {
-    padding-top: 0;
-    padding-bottom: .7rem;
-    color: var(--blackColor);
-    font-weight: 700
-}
-
-.search .sectionContainer .searchInputs .singleInput .texts input {
-    width: 95%;
-    border: none;
-    outline: none;
-    background: transparent
-}
-
-.search .sectionContainer .searchInputs .singleInput .texts input::placeholder {
-    font-size: 12px;
-    opacity: .5
-}
-
-.search .sectionContainer .btnBlock {
-    width: 100%;
-    justify-content: center;
-    gap: .5rem
-}
-
-.support .sectionContainer .titlesDiv {
-    text-align: center;
-}
 
 .support .sectionContainer .titlesDiv {
     small {
@@ -464,19 +740,22 @@ h2 {
 }
 
 .info {
-    background: var(--SecondaryColor)
+    background: var(--SecondaryColor);
 }
 
 .info .infoContainer .titleDiv {
     flex-direction: column;
     text-align: center;
     gap: 1.5rem;
-    justify-content: space-between
+    justify-content: space-between;
 }
 
 .info .infoContainer .cardsDiv {
+    display: flex;               /* Restored flex display */
+    flex-wrap: wrap;             /* Allows cards to wrap on smaller screens */
     gap: 1.5rem;
-    margin-top: 3rem
+    margin-top: 3rem;
+    justify-content: center;     /* Centers the cards horizontally */
 }
 
 .info .infoContainer .cardsDiv .singleCard {
@@ -488,37 +767,44 @@ h2 {
     margin: auto;
     height: 320px;
     width: 90%;
-    max-width: 250px
+    max-width: 250px;
+    box-sizing: border-box;
 }
 
 .info .infoContainer .cardsDiv .singleCard .iconDiv {
     justify-content: center;
     margin: auto;
     background: var(--PrimaryColor);
-    width: -webkit-max-content;
-    width: -moz-max-content;
     width: max-content;
     height: 55px;
     padding: 1rem;
-    border-radius: 3rem
+    border-radius: 3rem;
 }
 
 .info .infoContainer .cardsDiv .singleCard .iconDiv .icon {
-    color: var(--whiteColor)
+    color: var(--whiteColor);
 }
 
 .info .infoContainer .cardsDiv .singleCard .cardTitle {
     color: var(--blackColor);
-    font-weight: 700
+    font-weight: 700;
 }
 
 .info .infoContainer .cardsDiv .singleCard .colorOne {
-    background: var(--colorOne)
+    background: var(--colorOne);
 }
 
 .info .infoContainer .cardsDiv .singleCard .colorTwo {
-    background: var(--colorTwo)
+    background: var(--colorTwo);
 }
+
+/* Media Query to hide paragraph text on smaller screens */
+@media screen and (max-width: 600px) {
+    .info .infoContainer .cardsDiv .singleCard p {
+        display: none;
+    }
+}
+
 
 .lounge .sectionContainer {
     gap: 1.5rem
@@ -566,7 +852,9 @@ h2 {
     height: 320px
 }
 
-.travelers .sectionContainer .travelersContainer .singleTraveler .destinationImage,.travelers .sectionContainer .travelersContainer .singleTraveler .travelerImage,.travelers .sectionContainer .travelersContainer .singleTraveler .travelerName {
+.travelers .sectionContainer .travelersContainer .singleTraveler .destinationImage,
+.travelers .sectionContainer .travelersContainer .singleTraveler .travelerImage,
+.travelers .sectionContainer .travelersContainer .singleTraveler .travelerName {
     position: absolute
 }
 
@@ -590,7 +878,7 @@ h2 {
     bottom: 30px;
     left: 40%;
     transform: translate(-50%);
-    border: 5px solid rgba(255,255,255,.637);
+    border: 5px solid rgba(255, 255, 255, .637);
     transition: var(--transition);
     -webkit-animation: identifier 2.3s infinite;
     animation: identifier 2.3s infinite
@@ -809,59 +1097,56 @@ h2 {
     background: var(--whiteColor);
     border-radius: 1rem;
     box-shadow: var(--boxShadow);
-  
-    h2 {
-      color: var(--blackColor);
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-  
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-  
-      input {
-        width: 100%;
-        padding: 1rem;
-        border: 2px solid var(--borderColor);
-        border-radius: 3rem;
-        background: var(--inputColor);
-        color: var(--textColor);
-        
-        &::placeholder {
-          color: var(--greyText);
-        }
-      }
-  
-      button {
-        @extend .btn; // Inherit existing button styles
-        width: 100%;
-        margin-top: 1rem;
-      }
-    }
-  }
-  
 
-  .error {
+    h2 {
+        color: var(--blackColor);
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--borderColor);
+            border-radius: 3rem;
+            background: var(--inputColor);
+            color: var(--textColor);
+
+            &::placeholder {
+                color: var(--greyText);
+            }
+        }
+
+        button {
+            @extend .btn; // Inherit existing button styles
+            width: 100%;
+            margin-top: 1rem;
+        }
+    }
+}
+
+
+.error {
     color: var(--colorOne);
     font-size: 0.9rem;
     text-align: center;
     margin-top: 1rem;
-  }
+}
 
 @media screen and (min-width: 480px) {
     .home {
-        padding-top:12rem
+        padding-top: 12rem
     }
 
-    .search .sectionContainer .searchInputs {
-        display: grid;
-        grid-template-columns: repeat(2,1fr)
-    }
+
 
     .travelers .sectionContainer .travelersContainer {
-        grid-template-columns: repeat(2,1fr)
+        grid-template-columns: repeat(2, 1fr)
     }
 
     .subscribe .sectionContainer {
@@ -876,7 +1161,7 @@ h2 {
     }
 
     .footer .sectionContainer {
-        grid-template-columns: repeat(2,1fr)
+        grid-template-columns: repeat(2, 1fr)
     }
 
     .footer .sectionContainer .footerLinks {
@@ -885,8 +1170,9 @@ h2 {
 }
 
 @media screen and (min-width: 570px) {
+
     .home .mainText {
-        width:80%
+        width: 80%
     }
 
     .home .homeImages .video {
@@ -899,32 +1185,14 @@ h2 {
         top: -8%
     }
 
-    .search .sectionContainer .btns {
-        border-radius: 3rem;
-        flex-direction: row
-    }
 
-    .search .sectionContainer .searchInputs {
-        grid-template-columns: repeat(2,1fr)
-    }
 
     .support .sectionContainer .infoDiv .textDiv {
         margin-top: 2rem;
-        grid-template-columns: repeat(2,1fr)
+        grid-template-columns: repeat(2, 1fr)
     }
 
-    .info .infoContainer .titleDiv {
-        flex-direction: row
-    }
 
-    .info .infoContainer .titleDiv h2 {
-        text-align: left;
-        max-width: 500px
-    }
-
-    .info .infoContainer .cardsDiv,.lounge .sectionContainer .textDiv .grids {
-        grid-template-columns: repeat(2,1fr)
-    }
 
     .subscribe .sectionContainer {
         max-width: 80%;
@@ -947,13 +1215,15 @@ h2 {
     .footer .sectionContainer {
         padding-top: 2rem;
         align-items: flex-start;
-        grid-template-columns: repeat(3,1fr)
+        grid-template-columns: repeat(3, 1fr)
     }
 }
 
 @media screen and (min-width: 680px) {
-    .home .mainText,.home .homeImages .videoDiv {
-        width:80%
+
+    .home .mainText,
+    .home .homeImages .videoDiv {
+        width: 80%
     }
 
     .home .homeImages .videoDiv .video {
@@ -968,129 +1238,32 @@ h2 {
         top: -8%
     }
 
-    .search .sectionContainer .btns {
-        border-radius: 3rem;
-        flex-direction: row
-    }
 
-    .search .sectionContainer .searchInputs {
-        grid-template-columns: repeat(3,1fr)
-    }
 
     .footer .sectionContainer {
         padding-top: 2rem;
         align-items: flex-start;
-        grid-template-columns: repeat(4,1fr)
+        grid-template-columns: repeat(4, 1fr)
     }
 }
 
 @media screen and (min-width: 768px) {
-    .navBar {
-        align-items:center
-    }
 
-    .navBar .navBarOne .none {
-        display: flex;
-        gap: 1.5rem
-    }
-
-    .navBar .navBarOne .none li {
-        font-size: 13px;
-        gap: .5rem;
-        color: var(--textColor)
-    }
-
-    .navBar .navBarOne .none li:hover {
-        color: var(--PrimaryColor);
-        text-decoration: underline
-    }
-
-    .navBar .navBarTwo {
-        justify-content: space-between;
-        align-items: center
-    }
-
-    .navBar .navBarTwo .logoDiv .Logo {
-        max-width: 20%
-    }
-
-    .navBar .navBarTwo .menu {
-        flex-direction: row;
-        gap: .5rem
-    }
-
-    .navBar .navBarTwo .menu .listItem {
-        padding: 0 .5rem;
-        font-size: 14px
-    }
-
-    .navBar .navBarTwo .menu .listItem {
-        padding: 0 .5rem;
-        font-size: 14px;
-        cursor: pointer;
-        color: var(--textColor);
-        font-weight: 700
-    }
-
-    .navBar .navBarTwo .menu .listItem:hover {
-        color: var(--PrimaryColor);
-        font-weight: 700
-    }
-
-    .navBar .navBarTwo .btnOne,.navBar .navBarTwo .toggleIcon {
-        display: none
-    }
-
-    .navBar .navBarTwo .btnTwo {
-        display: block
-    }
-
-    .search .sectionContainer .btns {
-        width: 70%;
-        border-radius: 3rem;
-        flex-direction: row
-    }
-
-    .search .sectionContainer .searchInputs {
-        grid-template-columns: repeat(4,1fr)
-    }
-
-    .search .sectionContainer .searchInputs .singleInput .texts input {
-        width: 100%
-    }
 
     .support .sectionContainer .infoDiv {
-        grid-template-columns: repeat(2,1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 2rem;
         margin-top: 5rem
     }
 
     .support .sectionContainer .infoDiv .textDiv {
         margin-top: 0rem;
-        grid-template-columns: repeat(1,1fr)
+        grid-template-columns: repeat(1, 1fr)
     }
 
-    .info .infoContainer {
-        padding: 0 6rem
-    }
-
-    .info .infoContainer .titleDiv {
-        width: 90%;
-        margin: auto;
-        align-items: center
-    }
-
-    .info .infoContainer .cardsDiv {
-        grid-template-columns: repeat(3,1fr)
-    }
-
-    .info .infoContainer .cardsDiv .singleCard {
-        max-width: 260px;
-        padding: 3rem
-    }
 
     .lounge .sectionContainer {
-        grid-template-columns: repeat(2,1fr)
+        grid-template-columns: repeat(2, 1fr)
     }
 
     .lounge .sectionContainer .textDiv {
@@ -1098,11 +1271,11 @@ h2 {
     }
 
     .lounge .sectionContainer .textDiv .grids {
-        grid-template-columns: repeat(2,1fr)
+        grid-template-columns: repeat(2, 1fr)
     }
 
     .travelers .sectionContainer .travelersContainer {
-        grid-template-columns: repeat(3,1fr)
+        grid-template-columns: repeat(3, 1fr)
     }
 
     .nav-link {
@@ -1110,26 +1283,26 @@ h2 {
         padding: 0.5rem;
         display: block;
         text-align: center;
-      }
-    
-      .user-profile {
+    }
+
+    .user-profile {
         flex-direction: column;
         text-align: center;
-        
+
         .avatar {
-          margin: 0 auto;
+            margin: 0 auto;
         }
-      }
-    
-      .auth-container {
+    }
+
+    .auth-container {
         margin: 2rem 1rem;
         padding: 1.5rem;
-      }
+    }
 }
 
 @media screen and (min-width: 960px) {
     .home {
-        padding-top:13rem
+        padding-top: 13rem
     }
 
     .home .mainText {
@@ -1139,13 +1312,10 @@ h2 {
         line-height: 4rem
     }
 
-    .search .sectionContainer .searchInputs {
-        grid-template-columns: repeat(5,1fr)
-    }
 
     .travelers .sectionContainer .travelersContainer {
         margin: 3rem 0;
-        grid-template-columns: repeat(4,1fr)
+        grid-template-columns: repeat(4, 1fr)
     }
 
     .subscribe .sectionContainer {
@@ -1155,7 +1325,7 @@ h2 {
 
 @media screen and (min-width: 1024px) {
     p {
-        font-size:15px;
+        font-size: 15px;
         line-height: 25px
     }
 
@@ -1176,18 +1346,6 @@ h2 {
         padding: 6rem 0 4rem
     }
 
-    .navBar .navBarOne,.navBar .navBarTwo {
-        padding: 1.5rem 5rem
-    }
-
-    .navBar .navBarTwo{
-        padding-bottom: 0;
-        padding-top: 0;
-    }
-
-    .navBar .activeHeader {
-        padding: 0 5rem
-    }
 
     .home .mainText {
         width: 60%;
@@ -1215,14 +1373,11 @@ h2 {
         top: -10%
     }
 
-    .search .sectionContainer .btns {
-        width: 50%
-    }
 }
 
 @media screen and (min-width: 1106px) {
     .home .homeImages .videoDiv {
-        width:90%
+        width: 90%
     }
 
     .home .homeImages .videoDiv .video {
@@ -1245,22 +1400,7 @@ h2 {
 }
 
 @media screen and (min-width: 1332px) {
-    .navBar .navBarTwo .menu {
-        gap:1rem
-    }
 
-    .navBar .navBarTwo .menu .listItem {
-        padding: 0 1rem;
-        font-size: 14px
-    }
-
-    .navBar .navBarTwo .btnOne,.navBar .navBarTwo .toggleIcon {
-        display: none
-    }
-
-    .navBar .navBarTwo .btnTwo {
-        display: block
-    }
 
     .home .homeImages .plane {
         position: absolute;
@@ -1283,7 +1423,7 @@ h2 {
 
 @media screen and (min-width: 1440px) {
     .home .homeImages .plane {
-        position:absolute;
+        position: absolute;
         width: 90%;
         top: -30%
     }

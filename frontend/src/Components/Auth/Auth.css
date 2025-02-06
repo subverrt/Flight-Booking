@@ -5,7 +5,7 @@
 .auth-container {
   padding: 2rem 1.5rem;
   max-width: 400px;
-  margin: 120px auto 2rem; /* Adjusted to add top margin */
+  margin: 200px auto 2rem; /* Increased top margin to ensure the auth container is pushed below the navbar */
   text-align: center;
 }
 
@@ -56,6 +56,6 @@
 /* Additional Styles for Responsive Design */
 @media screen and (max-width: 600px) {
   .auth-container {
-    margin: 100px 1rem 2rem; /* Reduce side margins on smaller screens */
+    margin: 180px 1rem 2rem; /* Adjust the top margin for smaller screens if needed */
   }
 }
