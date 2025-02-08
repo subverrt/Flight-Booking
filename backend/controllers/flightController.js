@@ -1,134 +1,150 @@
-// controllers/flightController.js
+// FlightController.js
 
-const axios = require('axios');
-const { amadeusApiKey, amadeusApiSecret } = require('../config/apiKeys');
+// Import necessary modules
+const Flight = require('../models/Flight');
+const Amadeus = require('amadeus'); // Import the Amadeus SDK
+const util = require('util');
 
-// Function to obtain access token from Amadeus API
-const getAmadeusAccessToken = async () => {
+// Initialize the Amadeus API client
+const amadeusClient = new Amadeus({
+  clientId: process.env.AMADEUS_CLIENT_ID,
+  clientSecret: process.env.AMADEUS_CLIENT_SECRET
+});
+
+// Search Flights
+const searchFlights = async (req, res) => {
   try {
-    const response = await axios.post(
-      'https://test.api.amadeus.com/v1/security/oauth2/token',
-      new URLSearchParams({
-        grant_type: 'client_credentials',
-        client_id: amadeusApiKey,
-        client_secret: amadeusApiSecret,
-      })
-    );
-
-    const accessToken = response.data.access_token;
-    console.log('Amadeus Access Token:', accessToken); // Optional: Remove or comment out in production
-    return accessToken;
+    let { origin, destination, departureDate, travelClass, passengers } = req.query;
+    
+    // Trim input values to remove extra spaces
+    origin = origin ? origin.trim() : '';
+    destination = destination ? destination.trim() : '';
+    departureDate = departureDate ? departureDate.trim() : '';
+    
+    // Convert travelClass to uppercase and trim it to match the allowed enumeration (e.g., ECONOMY)
+    const formattedTravelClass = travelClass ? travelClass.trim().toUpperCase() : undefined;
+    
+    // Use the Amadeus API client with the correct endpoint and parameters
+    const response = await amadeusClient.shopping.flightOffersSearch.get({
+      originLocationCode: origin,
+      destinationLocationCode: destination,
+      departureDate: departureDate,
+      adults: passengers,
+      travelClass: formattedTravelClass,
+      currencyCode: 'INR'
+    });
+    
+    // Check for the expected data structure
+    const flightsData = response.data.data || response.data;
+    if (!flightsData || !Array.isArray(flightsData)) {
+      console.error(
+        'Unexpected response format:',
+        util.inspect(response.data, { depth: null })
+      );
+      return res.status(500).json({ message: 'Unexpected response format from Amadeus API' });
+    }
+    
+    // Format the flight data as needed
+    const formattedFlights = flightsData.map(flight => ({
+      id: flight.id,
+      airline: flight.validatingAirlineCodes[0],
+      flightNumber: flight.itineraries[0].segments[0].number,
+      departureAirport: flight.itineraries[0].segments[0].departure.iataCode,
+      arrivalAirport: flight.itineraries[0].segments[0].arrival.iataCode,
+      departureTime: flight.itineraries[0].segments[0].departure.at,
+      arrivalTime: flight.itineraries[0].segments[0].arrival.at,
+      duration: flight.itineraries[0].duration,
+      price: flight.price.total,
+      currency: flight.price.currency,
+      class: formattedTravelClass || 'N/A'  // <-- added this line
+    }));
+    
+    
+    res.status(200).json({ flights: formattedFlights });
   } catch (error) {
-    console.error('Error fetching Amadeus access token:', error.response?.data || error.message);
-    throw new Error('Error fetching Amadeus access token');
+    // Log full error details for debugging
+    console.error('Amadeus API Error:', util.inspect(error, { showHidden: true, depth: null }));
+    res.status(500).json({ message: 'Error searching flights' });
   }
 };
 
-// Controller function to search flights
-exports.searchFlights = async (req, res) => {
-  const { origin, destination, departureDate, travelClass, passengers } = req.query;
-
+// Get Seat Map
+const getSeatMap = async (req, res) => {
   try {
-    // Validate passengers
-    const passengerCount = parseInt(passengers);
-    if (isNaN(passengerCount) || passengerCount <= 0) {
-      return res.status(400).json({ message: 'Invalid passenger count. Please provide a positive number.' });
+    const { flightId } = req.params;
+    if (!/^[a-fA-F0-9]{24}$/.test(flightId)) {
+      return res.status(400).json({ message: 'Invalid flight ID format' });
     }
-
-    // Validate travelClass
-    const travelClassInput = travelClass.toUpperCase();
-    const validTravelClasses = ['ECONOMY', 'PREMIUM_ECONOMY', 'BUSINESS', 'FIRST'];
-    if (!validTravelClasses.includes(travelClassInput)) {
-      return res.status(400).json({ message: 'Invalid travel class. Please choose from ECONOMY, PREMIUM_ECONOMY, BUSINESS, or FIRST.' });
+    const flight = await Flight.findById(flightId);
+    if (!flight) {
+      console.warn(`Flight with ID ${flightId} not found. Returning dummy seat data.`);
+      return res.status(200).json({
+        seats: [
+          { seatNumber: "1A", isBooked: false },
+          { seatNumber: "1B", isBooked: true },
+          { seatNumber: "1C", isBooked: false },
+          { seatNumber: "2A", isBooked: false },
+          { seatNumber: "2B", isBooked: true },
+          { seatNumber: "2C", isBooked: false },
+        ],
+      });
     }
-
-    // Validate departureDate
-    if (!departureDate || !/^\d{4}-\d{2}-\d{2}$/.test(departureDate)) {
-      return res.status(400).json({ message: 'Invalid departure date. Please provide a date in YYYY-MM-DD format.' });
-    }
-
-    // Validate origin and destination
-    if (!origin || origin.length !== 3 || !destination || destination.length !== 3) {
-      return res.status(400).json({ message: 'Invalid origin or destination. Please provide valid IATA codes.' });
-    }
-
-    const accessToken = await getAmadeusAccessToken();
-
-    const apiUrl = 'https://test.api.amadeus.com/v2/shopping/flight-offers';
-
-    const params = {
-      originLocationCode: origin.toUpperCase(),
-      destinationLocationCode: destination.toUpperCase(),
-      departureDate,
-      adults: passengerCount,
-      travelClass: travelClassInput,
-      currencyCode: 'INR',
-      max: 10,
-    };
-
-    console.log('Amadeus API Request Params:', params); // Optional: Remove or comment out in production
-
-    const response = await axios.get(apiUrl, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      params,
-    });
-
-    // Check if data exists
-    if (!response.data || !response.data.data || response.data.data.length === 0) {
-      return res.status(404).json({ message: 'No flights found for the given criteria.' });
-    }
-
-    // Process the response data
-    const flights = response.data.data.map((offer) => {
-      const itinerary = offer.itineraries[0];
-      const segment = itinerary.segments[0];
-
-      return {
-        id: offer.id,
-        airline: segment.carrierCode,
-        flightNumber: segment.number,
-        departureAirport: segment.departure.iataCode,
-        arrivalAirport: segment.arrival.iataCode,
-        departureTime: segment.departure.at,
-        arrivalTime: segment.arrival.at,
-        duration: segment.duration,
-        price: offer.price.total,
-        currency: offer.price.currency,
-        class: travelClassInput,
-        seatsAvailable: offer.numberOfBookableSeats,
-      };
-    });
-
-    res.status(200).json({ flights });
+    res.status(200).json({ seats: flight.seats || [] });
   } catch (error) {
-    console.error('Error fetching flights:', error.response?.data || error.message);
-    res.status(500).json({ message: 'Error fetching flights' });
+    console.error('Error fetching seat map:', error.message);
+    res.status(500).json({ message: 'Error fetching seat map' });
   }
 };
 
-// Controller function to book flights (simulated)
-exports.bookFlight = async (req, res) => {
-  const { flightId } = req.params;
-  const { seats } = req.body;
-  const userId = req.user.id; // Requires authentication
-
+// Get flight details by ID.
+const getFlightById = async (req, res) => {
   try {
-    // Simulate booking logic
-    // In a real application, you would interact with your database and possibly the Amadeus API
-
-    // For now, we'll just return a success message
-    res.status(200).json({
-      message: 'Flight booked successfully',
-      bookingDetails: {
-        flightId,
-        seats,
-        userId,
-      },
-    });
+    const { flightId } = req.params;
+    if (!/^[a-fA-F0-9]{24}$/.test(flightId)) {
+      return res.status(400).json({ message: 'Invalid flight ID format' });
+    }
+    const flight = await Flight.findById(flightId);
+    if (!flight) {
+      return res.status(404).json({ message: 'Flight not found' });
+    }
+    res.status(200).json(flight);
   } catch (error) {
-    console.error('Error booking flight:', error.message);
-    res.status(500).json({ message: 'Error booking flight' });
+    console.error('Error fetching flight:', error);
+    res.status(500).json({ message: 'Error fetching flight' });
   }
+};
+
+// Book Flight
+const bookFlight = async (req, res) => {
+  try {
+    const { flightId } = req.params;
+    const { userId, seatNumber } = req.body;
+    if (!userId || !seatNumber) {
+      return res.status(400).json({ message: 'User ID and seat number are required.' });
+    }
+    const flight = await Flight.findById(flightId);
+    if (!flight) {
+      return res.status(404).json({ message: 'Flight not found.' });
+    }
+    if (flight.bookedSeats && flight.bookedSeats.includes(seatNumber)) {
+      return res.status(400).json({ message: 'Seat already booked.' });
+    }
+    if (!flight.bookedSeats) {
+      flight.bookedSeats = [];
+    }
+    flight.bookedSeats.push(seatNumber);
+    await flight.save();
+    res.status(200).json({ message: 'Flight booked successfully.', flight });
+  } catch (error) {
+    console.error('Error booking flight:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Export all functions
+module.exports = {
+  searchFlights,
+  getSeatMap,
+  getFlightById,
+  bookFlight,
 };

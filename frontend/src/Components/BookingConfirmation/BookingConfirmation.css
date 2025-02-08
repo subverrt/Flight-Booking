@@ -1,25 +1,68 @@
-/* src/Components/BookingConfirmation/BookingConfirmation.css */
-
-/* Booking Confirmation Container */
+/* frontend/src/Components/BookingConfirmation/BookingConfirmation.css */
 .booking-confirmation {
-    padding: 2rem 1.5rem;
-    text-align: center;
-  }
-  
-  .booking-confirmation h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: var(--PrimaryColor);
-  }
-  
-  .booking-confirmation h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: var(--blackColor);
-  }
-  
-  .booking-confirmation p {
-    margin-bottom: 0.5rem;
-    color: var(--textColor);
-  }
-  
+  max-width: 600px;
+  margin-top: 200px;
+  padding: 20px;
+  align-items: center;
+}
+
+.confirmation-details {
+  background-color: #f1f1f1;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.confirmation-details h3 {
+  text-align: center;
+  color:(--);
+}
+
+.confirmation-details p {
+  font-size: 16px;
+  margin: 10px 0;  
+  color: var(--textColor);
+}
+
+.confirmation-details ul {
+  list-style: none;
+  padding: 0;
+}
+
+.confirmation-details ul li {
+  font-size: 16px;
+  margin: 5px 0;
+}
+.confirmation-details {
+  padding: 20px;
+  background: var(--SecondaryColor);
+  border-radius: 8px;
+  box-shadow: var(--boxShadow);
+}
+
+.confirmation-details h3 {
+  color: var(--PrimaryColor);
+}
+
+.action-buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.action-buttons .btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--whiteColor);
+  transition: background-color 0.3s ease;
+}
+
+.download-btn {
+  background-color: var(--PrimaryColor);
+}
+
+.download-btn:hover {
+  background-color: var(--HoverColor);
+}

@@ -1,3 +1,4 @@
+// frontend/src/Components/Auth/Signup.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Auth.css';
@@ -14,7 +15,7 @@ const Signup = () => {
     setError('');
 
     try {
-      // 1. Signup request
+      // Signup request (this endpoint already generates and sends an OTP)
       const res = await fetch('http://localhost:5000/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -27,23 +28,12 @@ const Signup = () => {
         throw new Error(data.message || 'Signup failed');
       }
 
-      // 2. Send OTP request after successful signup
-      const otpRes = await fetch('http://localhost:5000/api/auth/send-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email }),
-      });
+      console.log("Signup successful, data:", data);
 
-      const otpData = await otpRes.json();
+      // Store the email (normalized) for the verification step
+      localStorage.setItem('tempEmail', formData.email.toLowerCase());
 
-      if (!otpRes.ok) {
-        throw new Error(otpData.message || 'Failed to send OTP');
-      }
-
-      // 3. Store email for verification step
-      localStorage.setItem('tempEmail', formData.email);
-
-      // 4. Navigate to OTP verification page
+      // Navigate to OTP verification page
       navigate('/verify-otp');
     } catch (err) {
       console.error('Signup error:', err);

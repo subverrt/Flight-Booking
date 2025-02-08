@@ -4,12 +4,14 @@ import { CgMenuGridO } from 'react-icons/cg';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import { AuthContext } from '../../AuthContext';
+import Switch from '../Switch';
 
 const Navbar = () => {
   const [menuActive, setMenuActive] = useState(false);
   const [navbarBg, setNavbarBg] = useState('');
   const { user, logout } = useContext(AuthContext);
   const [showSignout, setShowSignout] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const navigate = useNavigate();
 
   // Toggle mobile menu
@@ -21,14 +23,16 @@ const Navbar = () => {
     setShowSignout((prev) => !prev);
   };
 
+  // Handle logout
   const handleLogout = () => {
     logout();
     navigate('/');
   };
 
-  // Toggle Dark Mode by adding/removing a class on the body
+  // Toggle Dark Mode
   const toggleDarkMode = () => {
     document.body.classList.toggle('dark-mode');
+    setIsDarkMode(!isDarkMode);
   };
 
   // Change navbar background on scroll
@@ -42,6 +46,8 @@ const Navbar = () => {
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
+
+    // Cleanup
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -86,9 +92,10 @@ const Navbar = () => {
 
         {/* Right Section: Dark Mode toggle & Auth */}
         <div className="rightSection flex">
-          <button onClick={toggleDarkMode} className="dark-mode-toggle" title="Toggle Dark Mode">
-            🌙
-          </button>
+          {/* Dark Mode Switch */}
+          <Switch onChange={toggleDarkMode} checked={isDarkMode} />
+
+          {/* Authentication */}
           <div className="auth flex">
             {user ? (
               <div className="userProfile" onClick={toggleSignout}>

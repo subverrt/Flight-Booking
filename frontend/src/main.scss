@@ -155,6 +155,10 @@ h2 {
     padding: 1rem 0;
     color: var(--blackColor);
 }
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
 
 /* ======================================================
    Navbar Component Base Styles

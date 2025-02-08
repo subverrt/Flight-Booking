@@ -6,44 +6,17 @@ import './FlightResults.css';
 const FlightResults = ({ flights }) => {
   const navigate = useNavigate();
 
-  const handleBookFlight = async (flightId) => {
+  const handleBookFlight = (flight) => {
     const token = localStorage.getItem('token');
+    console.log('Token obtained from localStorage:', token);
 
     if (!token) {
       toast.error('Please log in to book a flight.');
       return;
     }
 
-    const seatsToBook = prompt('Enter number of seats to book:', '1');
-    const seats = parseInt(seatsToBook);
-
-    if (!seats || isNaN(seats) || seats <= 0) {
-      toast.error('Invalid number of seats.');
-      return;
-    }
-
-    try {
-      const response = await fetch(`http://localhost:5000/api/flights/${flightId}/book`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ seats }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        navigate('/booking-confirmation', { state: { bookingDetails: data } });
-        toast.success('Flight booked successfully!');
-      } else {
-        toast.error(data.message || 'Error booking flight');
-      }
-    } catch (error) {
-      console.error('Error booking flight:', error);
-      toast.error('An error occurred while booking the flight.');
-    }
+    // Navigate to the booking form and pass the flight details via state
+    navigate('/booking-form', { state: { flight } });
   };
 
   return (
@@ -71,7 +44,7 @@ const FlightResults = ({ flights }) => {
               <p>
                 <strong>Price:</strong> {flight.currency} {flight.price}
               </p>
-              <button className="btn" onClick={() => handleBookFlight(flight.id)}>
+              <button className="btn" onClick={() => handleBookFlight(flight)}>
                 Book Now
               </button>
             </div>

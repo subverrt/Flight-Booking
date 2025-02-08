@@ -1,0 +1,80 @@
+/* BookingForm.css */
+
+.booking-form {
+    width: 100%;
+    max-width: 400px;
+    /* Center horizontally and provide sufficient top margin so it doesn't mix with the navbar */
+    margin: 200px auto;
+    padding: 20px;
+    background-color: var(--SecondaryColor); /* Using global secondary color */
+    border-radius: 10px;
+    box-shadow: var(--boxShadow);
+  }
+  
+  .booking-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--blackColor); /* Using global black color */
+  }
+  
+  .booking-form label {
+    font-weight: bold;
+    display: block;
+    margin: 10px 0 5px;
+  }
+  
+  .booking-form input,
+  .booking-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--borderColor); /* Using global border color */
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: var(--inputColor);
+    color: var(--textColor);
+  }
+  
+  .booking-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--PrimaryColor); /* Using global primary color */
+    color: var(--whiteColor);
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .booking-form button:hover {
+    background-color: var(--HoverColor); /* Using global hover color */
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .booking-form {
+      margin: 150px auto;
+      padding: 15px;
+    }
+    
+    .booking-form input,
+    .booking-form select,
+    .booking-form button {
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .booking-form {
+      margin: 100px auto;
+      padding: 10px;
+    }
+    
+    .booking-form input,
+    .booking-form select,
+    .booking-form button {
+      font-size: 13px;
+    }
+  }
+  

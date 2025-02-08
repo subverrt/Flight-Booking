@@ -1,0 +1,55 @@
+/* SeatSelection.css */
+
+.seat-map-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 2rem;
+  padding: 1rem;
+  background-color: var(--greyBg); /* using global grey background */
+  border: 1px solid var(--borderColor);
+  border-radius: 8px;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.row-number {
+  width: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-right: 0.5rem;
+  color: var(--blackColor);
+}
+
+.seat {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--borderColor);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color var(--transition);
+  font-size: 0.9rem;
+  color: var(--blackColor);
+}
+
+.seat.available:hover {
+  background-color: var(--HoverColor);
+  color: var(--whiteColor);
+}
+
+.seat.booked {
+  background-color: var(--greyText);
+  cursor: not-allowed;
+}
+
+.seat.selected {
+  background-color: var(--PrimaryColor);
+  color: var(--whiteColor);
+}

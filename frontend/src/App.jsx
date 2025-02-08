@@ -16,6 +16,7 @@ import Login from './Components/Auth/Login';
 import Signup from './Components/Auth/Signup';
 import OtpVerification from './Components/Auth/OtpVerification';
 import Bookings from './Components/Bookings/Bookings';
+import BookingForm from './Components/BookingForm/BookingForm';
 import BookingConfirmation from './Components/BookingConfirmation/BookingConfirmation';
 import ProtectedRoute from './ProtectedRoute';
 
@@ -23,41 +24,60 @@ const App = () => {
   return (
     <Router>
       <div>
-        <Navbar/>
+        <Navbar />
         <ToastContainer />
 
         <Routes>
           {/* Main page route */}
-          <Route path="/" element={
-            <>
-              <Home/>
-              <Search/>
-              <Support/>
-              <Info/>
-              <Lounge/>
-              <Travellers/>
-              <Subscribe/>
-              <Footer/>
-            </>
-          }/>
+          <Route
+            path="/"
+            element={
+              <>
+                <Home />
+                <Search />
+                <Support />
+                <Info />
+                <Lounge />
+                <Travellers />
+                <Subscribe />
+                <Footer />
+              </>
+            }
+          />
 
           {/* Auth routes */}
-          <Route path="/login" element={<Login/>}/>
-          <Route path="/signup" element={<Signup/>}/>
-          <Route path="/verify-otp" element={<OtpVerification/>}/>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/verify-otp" element={<OtpVerification />} />
 
           {/* Protected routes */}
-          <Route path="/bookings" element={
-            <ProtectedRoute>
-              <Bookings/>
-            </ProtectedRoute>
-          }/>
+          <Route
+            path="/bookings"
+            element={
+              <ProtectedRoute>
+                <Bookings />
+              </ProtectedRoute>
+            }
+          />
 
-          <Route path="/booking-confirmation" element={
-            <ProtectedRoute>
-              <BookingConfirmation/>
-            </ProtectedRoute>
-          }/>
+          <Route
+            path="/booking-confirmation/:bookingId"
+            element={
+              <ProtectedRoute>
+                <BookingConfirmation />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Corrected booking form route */}
+          <Route
+            path="/booking-form"
+            element={
+              <ProtectedRoute>
+                <BookingForm />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
     </Router>

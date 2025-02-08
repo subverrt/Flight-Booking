@@ -1,8 +1,7 @@
-// models/Flight.js
+// backend/models/Flight.js
 const mongoose = require('mongoose');
 
-const FlightSchema = new mongoose.Schema({
-  id: String,
+const flightSchema = new mongoose.Schema({
   airline: String,
   flightNumber: String,
   departureAirport: String,
@@ -10,17 +9,11 @@ const FlightSchema = new mongoose.Schema({
   departureTime: Date,
   arrivalTime: Date,
   duration: String,
-  price: String,
+  price: Number,
   currency: String,
-  class: String, // ECONOMY, BUSINESS, FIRST
-  seatsAvailable: Number,
-  bookings: [
-    {
-      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-      seats: Number,
-      bookingDate: { type: Date, default: Date.now },
-    },
-  ],
+  class: String,
+  seats: { type: Array, default: [] },        // For seat map data (array of seat objects)
+  bookedSeats: { type: [String], default: [] }  // For tracking booked seat numbers
 });
 
-module.exports = mongoose.model('Flight', FlightSchema);
+module.exports = mongoose.model('Flight', flightSchema);

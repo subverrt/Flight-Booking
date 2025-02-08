@@ -5,7 +5,6 @@ import { RxCalendar } from 'react-icons/rx';
 import { toast } from 'react-toastify';
 import Aos from 'aos';
 import 'aos/dist/aos.css';
-
 import FlightResults from './FlightResults';
 
 const Search = () => {
@@ -22,27 +21,40 @@ const Search = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-
-    // Validation
+    console.log("handleSearch triggered with:", { origin, destination, departureDate, travelClass, travellers });
     if (!origin || !destination || !departureDate || !travelClass) {
       toast.error('Please fill in all fields.');
       return;
     }
-
-    const params = new URLSearchParams({
-      origin,
-      destination,
-      departureDate,
-      travelClass,
-      passengers: travellers,
-    });
-
+    const params = new URLSearchParams({ origin, destination, departureDate, travelClass, passengers: travellers });
     try {
-      const response = await fetch(`http://localhost:5000/api/flights/search?${params.toString()}`);
+      const requestUrl = `http://localhost:5000/api/flights/search?${params.toString()}`;
+      console.log("Fetching from:", requestUrl);
+      const response = await fetch(requestUrl);
       const data = await response.json();
-
+      console.log("Response data:", data);
       if (response.ok) {
-        setFlights(data.flights);
+        if (data.flights.length === 0) {
+          console.warn("No flights found. Using dummy data for testing.");
+          setFlights([
+            {
+              id: "637a22e5b8d1a1508ade777e", // Valid 24-character ObjectId
+              airline: "TestAir",
+              flightNumber: "TA123",
+              departureAirport: "DEL",
+              arrivalAirport: "BOM",
+              departureTime: new Date().toISOString(),
+              arrivalTime: new Date(new Date().getTime() + 2 * 60 * 60 * 1000).toISOString(),
+              duration: "2h",
+              price: 5000,
+              currency: "INR",
+              class: "ECONOMY",
+              seatsAvailable: 50,
+            },
+          ]);
+        } else {
+          setFlights(data.flights);
+        }
       } else {
         toast.error(data.message || 'Error fetching flights');
       }
@@ -67,7 +79,6 @@ const Search = () => {
               </div>
             ))}
           </div>
-
           <div data-aos='fade-up' data-aos-duration='2000' className="searchInputs flex">
             <div className="singleInput flex">
               <div className="iconDiv">
@@ -84,7 +95,6 @@ const Search = () => {
                 />
               </div>
             </div>
-
             <div className="singleInput flex">
               <div className="iconDiv">
                 <HiOutlineLocationMarker className='icon' />
@@ -100,7 +110,6 @@ const Search = () => {
                 />
               </div>
             </div>
-
             <div className="singleInput flex">
               <div className="iconDiv">
                 <RiAccountPinCircleLine className='icon' />
@@ -116,7 +125,6 @@ const Search = () => {
                 />
               </div>
             </div>
-
             <div className="singleInput flex">
               <div className="iconDiv">
                 <RxCalendar className='icon' />
@@ -131,15 +139,12 @@ const Search = () => {
                 />
               </div>
             </div>
-
             <button className='btn btnBlock flex' type="submit">
               Search Flights
             </button>
           </div>
         </form>
       </div>
-
-      {/* Display flight results */}
       {flights.length > 0 && <FlightResults flights={flights} />}
     </div>
   );
