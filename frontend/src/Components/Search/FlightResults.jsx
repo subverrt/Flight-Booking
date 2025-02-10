@@ -1,9 +1,11 @@
+// FlightResults.jsx
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './FlightResults.css';
 
-const FlightResults = ({ flights }) => {
+const FlightResults = ({ flights, travelClass }) => {
   const navigate = useNavigate();
 
   const handleBookFlight = (flight) => {
@@ -15,8 +17,8 @@ const FlightResults = ({ flights }) => {
       return;
     }
 
-    // Navigate to the booking form and pass the flight details via state
-    navigate('/booking-form', { state: { flight } });
+    // Navigate to the booking form and pass the flight details and travel class via state
+    navigate('/booking-form', { state: { flight, travelClass } });
   };
 
   return (
@@ -28,12 +30,16 @@ const FlightResults = ({ flights }) => {
         <div className="flight-list">
           {flights.map((flight) => (
             <div className="flight-card" key={flight.id}>
-              <h3>{flight.airline} - {flight.flightNumber}</h3>
+              <h3>
+                {flight.airline} - {flight.flightNumber}
+              </h3>
               <p>
-                <strong>Departure:</strong> {new Date(flight.departureTime).toLocaleString()} - {flight.departureAirport}
+                <strong>Departure:</strong> {new Date(flight.departureTime).toLocaleString()} -{' '}
+                {flight.departureAirport}
               </p>
               <p>
-                <strong>Arrival:</strong> {new Date(flight.arrivalTime).toLocaleString()} - {flight.arrivalAirport}
+                <strong>Arrival:</strong> {new Date(flight.arrivalTime).toLocaleString()} -{' '}
+                {flight.arrivalAirport}
               </p>
               <p>
                 <strong>Duration:</strong> {flight.duration}

@@ -1,4 +1,5 @@
 // backend/routes/bookingRoutes.js
+
 console.log('Booking routes file loaded.');
 const express = require('express');
 const router = express.Router();

@@ -1,3 +1,5 @@
+// Search.jsx
+
 import React, { useEffect, useState } from 'react';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 import { RiAccountPinCircleLine } from 'react-icons/ri';
@@ -12,7 +14,7 @@ const Search = () => {
     Aos.init({ duration: 2000 });
   }, []);
 
-  const [travelClass, setTravelClass] = useState('ECONOMY');
+  const [travelClass, setTravelClass] = useState('Economy');
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
   const [travellers, setTravellers] = useState(1);
@@ -21,34 +23,46 @@ const Search = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    console.log("handleSearch triggered with:", { origin, destination, departureDate, travelClass, travellers });
+    console.log('handleSearch triggered with:', {
+      origin,
+      destination,
+      departureDate,
+      travelClass,
+      travellers,
+    });
     if (!origin || !destination || !departureDate || !travelClass) {
       toast.error('Please fill in all fields.');
       return;
     }
-    const params = new URLSearchParams({ origin, destination, departureDate, travelClass, passengers: travellers });
+    const params = new URLSearchParams({
+      origin,
+      destination,
+      departureDate,
+      travelClass,
+      passengers: travellers,
+    });
     try {
       const requestUrl = `http://localhost:5000/api/flights/search?${params.toString()}`;
-      console.log("Fetching from:", requestUrl);
+      console.log('Fetching from:', requestUrl);
       const response = await fetch(requestUrl);
       const data = await response.json();
-      console.log("Response data:", data);
+      console.log('Response data:', data);
       if (response.ok) {
         if (data.flights.length === 0) {
-          console.warn("No flights found. Using dummy data for testing.");
+          console.warn('No flights found. Using dummy data for testing.');
           setFlights([
             {
-              id: "637a22e5b8d1a1508ade777e", // Valid 24-character ObjectId
-              airline: "TestAir",
-              flightNumber: "TA123",
-              departureAirport: "DEL",
-              arrivalAirport: "BOM",
+              id: '637a22e5b8d1a1508ade777e', // Valid 24-character ObjectId
+              airline: 'TestAir',
+              flightNumber: 'TA123',
+              departureAirport: 'DEL',
+              arrivalAirport: 'BOM',
               departureTime: new Date().toISOString(),
               arrivalTime: new Date(new Date().getTime() + 2 * 60 * 60 * 1000).toISOString(),
-              duration: "2h",
+              duration: '2h',
               price: 5000,
-              currency: "INR",
-              class: "ECONOMY",
+              currency: 'INR',
+              class: travelClass,
               seatsAvailable: 50,
             },
           ]);
@@ -65,30 +79,30 @@ const Search = () => {
   };
 
   return (
-    <div className='search container section'>
-      <div data-aos='fade-up' data-aos-duration='2000' className="sectionContainer grid">
+    <div className="search container section">
+      <div data-aos="fade-up" data-aos-duration="2000" className="sectionContainer grid">
         <form onSubmit={handleSearch}>
           <div className="btns flex">
-            {['Economy', 'Premium_Economy', 'Business', 'First'].map((classType) => (
+            {['Economy', 'Premium Economy', 'Business', 'First'].map((classType) => (
               <div
                 key={classType}
                 className={`singleBtn ${travelClass === classType ? 'active' : ''}`}
                 onClick={() => setTravelClass(classType)}
               >
-                <span>{classType.replace('_', ' ')}</span>
+                <span>{classType}</span>
               </div>
             ))}
           </div>
-          <div data-aos='fade-up' data-aos-duration='2000' className="searchInputs flex">
+          <div data-aos="fade-up" data-aos-duration="2000" className="searchInputs flex">
             <div className="singleInput flex">
               <div className="iconDiv">
-                <HiOutlineLocationMarker className='icon' />
+                <HiOutlineLocationMarker className="icon" />
               </div>
               <div className="texts">
                 <h4>Origin</h4>
                 <input
                   type="text"
-                  placeholder='From (IATA code)'
+                  placeholder="From (IATA code)"
                   value={origin}
                   onChange={(e) => setOrigin(e.target.value.toUpperCase())}
                   required
@@ -97,13 +111,13 @@ const Search = () => {
             </div>
             <div className="singleInput flex">
               <div className="iconDiv">
-                <HiOutlineLocationMarker className='icon' />
+                <HiOutlineLocationMarker className="icon" />
               </div>
               <div className="texts">
                 <h4>Destination</h4>
                 <input
                   type="text"
-                  placeholder='To (IATA code)'
+                  placeholder="To (IATA code)"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value.toUpperCase())}
                   required
@@ -112,7 +126,7 @@ const Search = () => {
             </div>
             <div className="singleInput flex">
               <div className="iconDiv">
-                <RiAccountPinCircleLine className='icon' />
+                <RiAccountPinCircleLine className="icon" />
               </div>
               <div className="texts">
                 <h4>Travellers</h4>
@@ -127,7 +141,7 @@ const Search = () => {
             </div>
             <div className="singleInput flex">
               <div className="iconDiv">
-                <RxCalendar className='icon' />
+                <RxCalendar className="icon" />
               </div>
               <div className="texts">
                 <h4>Departure Date</h4>
@@ -139,13 +153,13 @@ const Search = () => {
                 />
               </div>
             </div>
-            <button className='btn btnBlock flex' type="submit">
+            <button className="btn btnBlock flex" type="submit">
               Search Flights
             </button>
           </div>
         </form>
       </div>
-      {flights.length > 0 && <FlightResults flights={flights} />}
+      {flights.length > 0 && <FlightResults flights={flights} travelClass={travelClass} />}
     </div>
   );
 };

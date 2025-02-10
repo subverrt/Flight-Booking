@@ -1,36 +1,30 @@
 // backend/models/Booking.js
-const mongoose = require("mongoose");
 
-const seatSchema = new mongoose.Schema({
-  seatNumber: String,
-  class: String,
-  price: Number,
-  status: { type: String, enum: ['available', 'booked'], default: 'available' }
-});
+const mongoose = require('mongoose');
 
 const passengerSchema = new mongoose.Schema({
   name: String,
-  age: String,
-  passport: String,
-  seat: seatSchema
+  age: Number,
+  gender: String,
 });
 
 const bookingSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   flight: {
-    type: new mongoose.Schema({
-      airline: String,
-      flightNumber: String,
-      departureAirport: String,
-      arrivalAirport: String,
-      departureTime: Date,
-      arrivalTime: Date,
-      price: Number,
-      currency: String
-    }, { _id: false }),
-    required: true
+    id: String,
+    airline: String,
+    flightNumber: String,
+    departureAirport: String,
+    arrivalAirport: String,
+    departureTime: String,
+    arrivalTime: String,
+    duration: String,
+    price: Number,
+    currency: String,
+    class: String,
+    aircraftType: String,
   },
-  seats: { type: [String], default: [] },     // selected seat numbers
+  seats: { type: [String], default: [] }, // selected seat numbers
   passengers: [passengerSchema],
   totalAmount: { type: Number, required: true },
   razorpayOrderId: String,
@@ -38,15 +32,15 @@ const bookingSchema = new mongoose.Schema({
   razorpaySignature: String,
   paymentStatus: {
     type: String,
-    enum: ["pending", "success", "failed"],
-    default: "pending"
+    enum: ['pending', 'success', 'failed'],
+    default: 'pending',
   },
   bookingStatus: {
     type: String,
-    enum: ["confirmed", "cancelled", "pending"],
-    default: "pending"
+    enum: ['confirmed', 'cancelled', 'pending'],
+    default: 'pending',
   },
-  bookingDate: { type: Date, default: Date.now }
+  bookingDate: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model("Booking", bookingSchema);
+module.exports = mongoose.model('Booking', bookingSchema);

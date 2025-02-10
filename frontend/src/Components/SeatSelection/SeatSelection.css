@@ -1,20 +1,77 @@
 /* SeatSelection.css */
 
+/* Define new variables for seat colors */
+:root {
+  --windowBorderColor: #1e90ff;
+  --aisleBorderColor: #ffa500;
+  --middleBorderColor: #6a5acd;
+  --firstClassSeatColor: #ffd700; /* Gold */
+  --businessSeatColor: #ffe4b5; /* Light tan */
+  --premiumEconomySeatColor: #add8e6; /* Light blue */
+  --economySeatColor: var(--whiteColor);
+}
+
+/* Adjusted colors for dark mode */
+body.dark-mode {
+  --windowBorderColor: #5dade2;
+  --aisleBorderColor: #ffb74d;
+  --middleBorderColor: #af7ac5;
+  --firstClassSeatColor: #d4af37; /* Darker gold */
+  --businessSeatColor: #d2b48c; /* Tan */
+  --premiumEconomySeatColor: #87ceeb; /* Sky blue */
+  --economySeatColor: var(--greyBg);
+}
+
+/* Global styles for margin-top to prevent overlapping with navbar */
+.seat-selection-wrapper {
+  margin-top: 200px; /* Default top margin for larger screens */
+  padding: 0 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .seat-selection-wrapper {
+    margin-top: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .seat-selection-wrapper {
+    margin-top: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .seat-selection-wrapper {
+    margin-top: 80px;
+  }
+}
+
 .seat-map-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin: 2rem;
+  margin: 0 auto;
   padding: 1rem;
-  background-color: var(--greyBg); /* using global grey background */
+  max-width: 800px;
+  background-color: var(--greyBg);
   border: 1px solid var(--borderColor);
   border-radius: 8px;
+}
+
+.seat-map-container h3 {
+  text-align: center;
+  color: var(--blackColor);
+  margin-bottom: 1rem;
 }
 
 .seat-row {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .row-number {
@@ -39,6 +96,10 @@
   color: var(--blackColor);
 }
 
+.seat.available {
+  background-color: var(--inputColor);
+}
+
 .seat.available:hover {
   background-color: var(--HoverColor);
   color: var(--whiteColor);
@@ -52,4 +113,85 @@
 .seat.selected {
   background-color: var(--PrimaryColor);
   color: var(--whiteColor);
+}
+
+.seat.disabled {
+  background-color: #d3d3d3;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Seat types */
+.seat.window {
+  border-color: var(--windowBorderColor);
+}
+
+.seat.aisle {
+  border-color: var(--aisleBorderColor);
+}
+
+.seat.middle {
+  border-color: var(--middleBorderColor);
+}
+
+/* Seat classes */
+.seat.first {
+  background-color: var(--firstClassSeatColor);
+}
+
+.seat.business {
+  background-color: var(--businessSeatColor);
+}
+
+.seat.premium-economy {
+  background-color: var(--premiumEconomySeatColor);
+}
+
+.seat.economy {
+  background-color: var(--economySeatColor);
+}
+
+/* Legends */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.legend div {
+  display: flex;
+  align-items: center;
+}
+
+.legend .seat {
+  margin-right: 0.5rem;
+}
+
+/* Responsive adjustments for seat sizes */
+@media (max-width: 768px) {
+  .seat {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.8rem;
+  }
+
+  .row-number {
+    width: 1.5rem;
+    margin-right: 0.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .seat {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 0.7rem;
+  }
+
+  .row-number {
+    width: 1.2rem;
+    margin-right: 0.2rem;
+  }
 }

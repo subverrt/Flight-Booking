@@ -1,8 +1,10 @@
 // backend/controllers/bookingController.js
+
 const Booking = require('../models/Booking');
 const Flight = require('../models/Flight');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
+const { generateSeatMap } = require('../utils/seatMapGenerator');
 require('dotenv').config();
 
 const razorpayInstance = new Razorpay({
@@ -14,38 +16,89 @@ const razorpayInstance = new Razorpay({
 const createBooking = async (req, res) => {
   try {
     const userId = req.userId;
-    const { flight, selectedSeats, passengers } = req.body;
+    const { flight, seatNumbers, passengers, totalAmount } = req.body;
 
-    let flightRecord = null;
-    if (flight && flight.id && /^[0-9a-fA-F]{24}$/.test(flight.id)) {
-      flightRecord = await Flight.findById(flight.id);
+    // Log the request body for debugging
+    console.log('Booking request body:', req.body);
+
+    // Validate required fields
+    if (!flight || !passengers || !seatNumbers || !totalAmount) {
+      console.error('Missing required booking details.');
+      return res.status(400).json({ message: 'Missing required booking details.' });
     }
-    if (!flightRecord) {
-      flightRecord = flight;
+
+    // Access the travel class
+    const bookedClass = flight.travelClass;
+    if (!bookedClass) {
+      console.error('Flight travel class is missing.');
+      return res.status(400).json({ message: 'Flight travel class is missing.' });
     }
 
-    const seats = selectedSeats || [];
-    const totalAmount = flightRecord.price * passengers.length;
+    // Fetch or create the Flight document
+    let flightDoc = await Flight.findById(flight.id);
+    if (!flightDoc) {
+      flightDoc = new Flight({
+        _id: flight.id,
+        ...flight,
+        bookedSeats: [],
+      });
+      await flightDoc.save();
+    }
 
+    // Generate seat map
+    const seatMap = generateSeatMap(flight.aircraftType || 'A320');
+
+    // Validate selected seats
+    const invalidSeats = [];
+    const alreadyBookedSeats = [];
+
+    for (const seatNumber of seatNumbers) {
+      const seat = seatMap.find((s) => s.seatNumber === seatNumber);
+      if (!seat) {
+        invalidSeats.push(seatNumber);
+      } else if (seat.class.toLowerCase() !== bookedClass.toLowerCase()) {
+        invalidSeats.push(seatNumber);
+      } else if (flightDoc.bookedSeats.includes(seatNumber)) {
+        alreadyBookedSeats.push(seatNumber);
+      }
+    }
+
+    if (invalidSeats.length > 0) {
+      return res.status(400).json({
+        message: `The following seats are not available for the booked class (${bookedClass}): ${invalidSeats.join(
+          ', '
+        )}`,
+      });
+    }
+
+    if (alreadyBookedSeats.length > 0) {
+      return res.status(400).json({
+        message: `The following seats are already booked: ${alreadyBookedSeats.join(', ')}`,
+      });
+    }
+
+    // Create a new Booking document with the provided flight details
+    const booking = new Booking({
+      user: userId,
+      flight: flight,
+      seats: seatNumbers,
+      passengers: passengers,
+      totalAmount: totalAmount,
+      paymentStatus: 'pending',
+      bookingStatus: 'pending',
+    });
+
+    // Create a Razorpay order
     const options = {
-      amount: totalAmount * 100, // amount in paise
+      amount: totalAmount * 100, // Amount in paise
       currency: 'INR',
       receipt: `receipt_order_${Date.now()}`,
     };
 
     const order = await razorpayInstance.orders.create(options);
 
-    const booking = new Booking({
-      user: userId,
-      flight: flightRecord,
-      seats: seats,
-      passengers: passengers,
-      totalAmount: totalAmount,
-      razorpayOrderId: order.id,
-      paymentStatus: 'pending',
-      bookingStatus: 'pending'
-    });
-
+    // Save the order ID in the booking
+    booking.razorpayOrderId = order.id;
     await booking.save();
 
     res.status(201).json({
@@ -60,7 +113,7 @@ const createBooking = async (req, res) => {
   }
 };
 
-// Verify payment (unchanged)
+// Verify payment and update seat availability
 const verifyPayment = async (req, res) => {
   try {
     const { razorpayOrderId, razorpayPaymentId, razorpaySignature, bookingId } = req.body;
@@ -74,18 +127,35 @@ const verifyPayment = async (req, res) => {
       return res.status(400).json({ message: 'Invalid signature' });
     }
 
-    const updatedBooking = await Booking.findByIdAndUpdate(
-      bookingId,
-      {
-        razorpayPaymentId,
-        razorpaySignature,
-        paymentStatus: 'success',
-        bookingStatus: 'confirmed',
-      },
-      { new: true }
-    ).populate('user');
+    const booking = await Booking.findById(bookingId);
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
 
-    res.status(200).json({ message: 'Payment verified successfully', booking: updatedBooking });
+    // Update booking status
+    booking.razorpayPaymentId = razorpayPaymentId;
+    booking.razorpaySignature = razorpaySignature;
+    booking.paymentStatus = 'success';
+    booking.bookingStatus = 'confirmed';
+    await booking.save();
+
+    // Update the Flight document to mark seats as booked
+    let flightDoc = await Flight.findById(booking.flight.id);
+    if (!flightDoc) {
+      // Flight document should exist; if not, create it
+      flightDoc = new Flight({
+        _id: booking.flight.id,
+        ...booking.flight,
+        bookedSeats: [],
+      });
+      await flightDoc.save();
+    }
+
+    // Add booked seats
+    flightDoc.bookedSeats.push(...booking.seats);
+    await flightDoc.save();
+
+    res.status(200).json({ message: 'Payment verified successfully', booking });
   } catch (error) {
     console.error('Error verifying payment:', error.message);
     res.status(500).json({ message: 'Error verifying payment' });
@@ -96,17 +166,12 @@ const verifyPayment = async (req, res) => {
 const getBookingDetails = async (req, res) => {
   try {
     const { bookingId } = req.params;
-    let booking = await Booking.findById(bookingId).populate('flight');
+    const booking = await Booking.findById(bookingId);
 
     if (!booking) {
       return res.status(404).json({ message: 'Booking not found' });
     }
-    // If booking.flight is not populated correctly, load it from Flight model
-    if (!booking.flight || typeof booking.flight === 'string') {
-      const flightData = await Flight.findById(booking.flight);
-      booking = booking.toObject();
-      booking.flight = flightData;
-    }
+
     res.status(200).json(booking);
   } catch (error) {
     console.error('Error fetching booking details:', error.message);
@@ -114,7 +179,7 @@ const getBookingDetails = async (req, res) => {
   }
 };
 
-// Cancel booking: update bookingStatus to "cancelled"
+// Cancel booking and update seat availability
 const cancelBooking = async (req, res) => {
   try {
     const bookingId = req.params.bookingId;
@@ -127,10 +192,19 @@ const cancelBooking = async (req, res) => {
     if (!booking) {
       return res.status(404).json({ message: 'Booking not found or already cancelled' });
     }
-    console.log('Cancelled booking:', booking);
+
+    // Update Flight document to unmark the seats
+    const flightDoc = await Flight.findById(booking.flight.id);
+    if (flightDoc) {
+      flightDoc.bookedSeats = flightDoc.bookedSeats.filter(
+        (seatNumber) => !booking.seats.includes(seatNumber)
+      );
+      await flightDoc.save();
+    }
+
     res.status(200).json({ message: 'Booking cancelled successfully', booking });
   } catch (error) {
-    console.error('Error cancelling booking:', error);
+    console.error('Error cancelling booking:', error.message);
     res.status(500).json({ message: 'Error cancelling booking' });
   }
 };

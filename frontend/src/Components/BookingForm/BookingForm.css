@@ -1,80 +1,136 @@
 /* BookingForm.css */
 
-.booking-form {
-    width: 100%;
-    max-width: 400px;
-    /* Center horizontally and provide sufficient top margin so it doesn't mix with the navbar */
-    margin: 200px auto;
+/* Global styles */
+.booking-form-container {
+  max-width: 800px;
+  margin: 0 auto; /* Center the container */
+  margin-top: 200px; /* Default top margin for larger screens */
+  padding: 20px;
+  background-color: var(--SecondaryColor);
+  border-radius: 10px;
+  box-shadow: var(--boxShadow);
+}
+
+.booking-form-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--blackColor);
+}
+
+.passenger-details {
+  margin-bottom: 30px;
+}
+
+.passenger-details h3 {
+  margin-bottom: 15px;
+}
+
+.passenger-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.passenger-form input,
+.passenger-form select {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px;
+  border: 1px solid var(--borderColor);
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: var(--inputColor);
+  color: var(--textColor);
+}
+
+.add-passenger {
+  padding: 10px 20px;
+  background-color: var(--PrimaryColor);
+  color: var(--whiteColor);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.add-passenger:hover {
+  background-color: var(--HoverColor);
+}
+
+.payment-summary {
+  margin-top: 30px;
+}
+
+.payment-summary h3 {
+  margin-bottom: 15px;
+}
+
+.payment-summary p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.pay-button {
+  width: 100%;
+  padding: 15px;
+  background-color: var(--PrimaryColor);
+  color: var(--whiteColor);
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pay-button:hover {
+  background-color: var(--HoverColor);
+}
+
+.booking-status {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+/* BookingForm.css */
+
+.error-message {
+  margin-top: 200px; /* Ensure it doesn't overlap with the navbar */
+  text-align: center;
+  color: red;
+  font-size: 18px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .booking-form-container {
+    margin-top: 150px; /* Adjusted top margin for medium screens */
     padding: 20px;
-    background-color: var(--SecondaryColor); /* Using global secondary color */
-    border-radius: 10px;
-    box-shadow: var(--boxShadow);
   }
-  
-  .booking-form h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: var(--blackColor); /* Using global black color */
+}
+
+@media (max-width: 768px) {
+  .booking-form-container {
+    margin-top: 100px; /* Adjusted top margin for small screens */
+    padding: 15px;
   }
-  
-  .booking-form label {
-    font-weight: bold;
-    display: block;
-    margin: 10px 0 5px;
+
+  .passenger-form input,
+  .passenger-form select,
+  .pay-button {
+    font-size: 14px;
   }
-  
-  .booking-form input,
-  .booking-form select {
-    width: 100%;
+}
+
+@media (max-width: 480px) {
+  .booking-form-container {
+    margin-top: 80px; /* Adjusted top margin for mobile devices */
     padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid var(--borderColor); /* Using global border color */
-    border-radius: 5px;
-    font-size: 16px;
-    background-color: var(--inputColor);
-    color: var(--textColor);
   }
-  
-  .booking-form button {
-    width: 100%;
-    padding: 10px;
-    background-color: var(--PrimaryColor); /* Using global primary color */
-    color: var(--whiteColor);
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+
+  .passenger-form input,
+  .passenger-form select,
+  .pay-button {
+    font-size: 13px;
   }
-  
-  .booking-form button:hover {
-    background-color: var(--HoverColor); /* Using global hover color */
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .booking-form {
-      margin: 150px auto;
-      padding: 15px;
-    }
-    
-    .booking-form input,
-    .booking-form select,
-    .booking-form button {
-      font-size: 14px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .booking-form {
-      margin: 100px auto;
-      padding: 10px;
-    }
-    
-    .booking-form input,
-    .booking-form select,
-    .booking-form button {
-      font-size: 13px;
-    }
-  }
-  
+}
