@@ -375,6 +375,7 @@ body.dark-mode {
     background: var(--whiteColor);
   }
   .navBar .navbarInner {
+    display: flex;
     /* Hide desktop auth on mobile */
   }
   .navBar .navbarInner .auth.desktop-auth {

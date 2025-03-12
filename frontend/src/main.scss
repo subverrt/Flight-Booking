@@ -209,11 +209,7 @@ body.dark-mode {
       .menu {
         display: flex;
         align-items: center;
-  
-        &.active {
-          // Active state is handled in mobile media
-        }
-  
+        
         .menuList {
           display: flex;
           margin: 0;
@@ -402,6 +398,7 @@ body.dark-mode {
         background: var(--whiteColor);
       }
       .navbarInner {
+        display: flex; // Added to avoid empty ruleset
         /* Hide desktop auth on mobile */
         .auth.desktop-auth {
           display: none;
@@ -516,6 +513,8 @@ body.dark-mode {
       }
     }
   }
+  
+  
   
   
   
