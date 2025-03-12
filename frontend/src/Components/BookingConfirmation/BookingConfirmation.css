@@ -1,25 +1,27 @@
-/* frontend/src/Components/BookingConfirmation/BookingConfirmation.css */
-.booking-confirmation {
+/* BookingConfirmation.css */
+
+.booking-confirmation.container {
   max-width: 600px;
-  margin-top: 200px;
+  margin-top: 120px; /* Ensures top margin is applied */
   padding: 20px;
-  align-items: center;
+  align-items: center; /* Use flex or another container style if needed */
 }
 
 .confirmation-details {
-  background-color: #f1f1f1;
   padding: 20px;
+  background: var(--SecondaryColor);
   border-radius: 8px;
+  box-shadow: var(--boxShadow);
 }
 
 .confirmation-details h3 {
   text-align: center;
-  color:(--);
+  color: var(--PrimaryColor);
 }
 
 .confirmation-details p {
   font-size: 16px;
-  margin: 10px 0;  
+  margin: 10px 0;
   color: var(--textColor);
 }
 
@@ -31,16 +33,6 @@
 .confirmation-details ul li {
   font-size: 16px;
   margin: 5px 0;
-}
-.confirmation-details {
-  padding: 20px;
-  background: var(--SecondaryColor);
-  border-radius: 8px;
-  box-shadow: var(--boxShadow);
-}
-
-.confirmation-details h3 {
-  color: var(--PrimaryColor);
 }
 
 .action-buttons {
@@ -65,4 +57,10 @@
 
 .download-btn:hover {
   background-color: var(--HoverColor);
+}
+
+/* Optional: styling for any error messages */
+.error {
+  color: red;
+  margin-top: 20px;
 }

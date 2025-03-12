@@ -1,35 +1,29 @@
-// Search.jsx
+// src/Components/Search/Search.jsx
 
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 import { RiAccountPinCircleLine } from 'react-icons/ri';
 import { RxCalendar } from 'react-icons/rx';
 import { toast } from 'react-toastify';
 import Aos from 'aos';
 import 'aos/dist/aos.css';
-import FlightResults from './FlightResults';
 
 const Search = () => {
   useEffect(() => {
     Aos.init({ duration: 2000 });
   }, []);
 
+  const navigate = useNavigate();
+
   const [travelClass, setTravelClass] = useState('Economy');
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
   const [travellers, setTravellers] = useState(1);
   const [departureDate, setDepartureDate] = useState('');
-  const [flights, setFlights] = useState([]);
 
-  const handleSearch = async (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
-    console.log('handleSearch triggered with:', {
-      origin,
-      destination,
-      departureDate,
-      travelClass,
-      travellers,
-    });
     if (!origin || !destination || !departureDate || !travelClass) {
       toast.error('Please fill in all fields.');
       return;
@@ -41,46 +35,13 @@ const Search = () => {
       travelClass,
       passengers: travellers,
     });
-    try {
-      const requestUrl = `http://localhost:5000/api/flights/search?${params.toString()}`;
-      console.log('Fetching from:', requestUrl);
-      const response = await fetch(requestUrl);
-      const data = await response.json();
-      console.log('Response data:', data);
-      if (response.ok) {
-        if (data.flights.length === 0) {
-          console.warn('No flights found. Using dummy data for testing.');
-          setFlights([
-            {
-              id: '637a22e5b8d1a1508ade777e', // Valid 24-character ObjectId
-              airline: 'TestAir',
-              flightNumber: 'TA123',
-              departureAirport: 'DEL',
-              arrivalAirport: 'BOM',
-              departureTime: new Date().toISOString(),
-              arrivalTime: new Date(new Date().getTime() + 2 * 60 * 60 * 1000).toISOString(),
-              duration: '2h',
-              price: 5000,
-              currency: 'INR',
-              class: travelClass,
-              seatsAvailable: 50,
-            },
-          ]);
-        } else {
-          setFlights(data.flights);
-        }
-      } else {
-        toast.error(data.message || 'Error fetching flights');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      toast.error('An error occurred while searching for flights.');
-    }
+    // Redirect to the dedicated flight search page with the search parameters in the URL
+    navigate(`/flight-search?${params.toString()}`);
   };
 
   return (
     <div className="search container section">
-      <div data-aos="fade-up" data-aos-duration="2000" className="sectionContainer grid">
+      <div data-aos="fade-up" className="sectionContainer grid">
         <form onSubmit={handleSearch}>
           <div className="btns flex">
             {['Economy', 'Premium Economy', 'Business', 'First'].map((classType) => (
@@ -93,7 +54,7 @@ const Search = () => {
               </div>
             ))}
           </div>
-          <div data-aos="fade-up" data-aos-duration="2000" className="searchInputs flex">
+          <div data-aos="fade-up" className="searchInputs flex">
             <div className="singleInput flex">
               <div className="iconDiv">
                 <HiOutlineLocationMarker className="icon" />
@@ -159,7 +120,6 @@ const Search = () => {
           </div>
         </form>
       </div>
-      {flights.length > 0 && <FlightResults flights={flights} travelClass={travelClass} />}
     </div>
   );
 };

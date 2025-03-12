@@ -5,9 +5,9 @@ import Logo from '../../assets/logo.png';
 import Aos from 'aos';
 import 'aos/dist/aos.css';
 
-import { TiSocialFacebook } from 'react-icons/ti';
-import { AiFillYoutube, AiOutlineTwitter } from 'react-icons/ai';
-import { FaPinterestP } from 'react-icons/fa';
+import { AiFillYoutube } from 'react-icons/ai';
+import { FaPinterestP, FaInstagram } from 'react-icons/fa';
+import { RiTwitterXFill } from "react-icons/ri";
 
 const Footer = () => {
   useEffect(() => {
@@ -23,8 +23,8 @@ const Footer = () => {
           </div>
           <p>Your mind should be stronger than your feelings, fly!</p>
           <div className="socialIcon flex">
-            <TiSocialFacebook className='icon' />
-            <AiOutlineTwitter className='icon' />
+            <FaInstagram className='icon' />
+            <RiTwitterXFill className='icon' />
             <AiFillYoutube className='icon' />
             <FaPinterestP className='icon' />
           </div>
@@ -94,7 +94,7 @@ const Footer = () => {
               <a href='#'>Careers</a>
             </li>
             <li>
-              <a href='#'>Transportation</a>
+              <a href='#'>ortation</a>
             </li>
             <li>
               <a href='#'>Programme Rules</a>

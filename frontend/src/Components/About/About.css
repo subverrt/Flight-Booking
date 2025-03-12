@@ -1,0 +1,276 @@
+/* src/Components/About/About.css */
+
+/* General Styles */
+.about-page {
+    overflow-x: hidden;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    position: relative;
+    height: 70vh;
+    overflow: hidden;
+  }
+  
+  .hero-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .hero-section .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay for better text visibility */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 1rem;
+  }
+  
+  .hero-section h1 {
+    font-size: 4rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .hero-section p {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.766);
+    margin-top: 1rem;
+  }
+  
+  /* About Us Section */
+  .about-us {
+    padding: 4rem 0;
+  }
+  
+  .about-us h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    color: var(--blackColor);
+  }
+  
+  .about-us p {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: var(--textColor);
+    text-align: center;
+  }
+  
+  /* Services Section */
+  .services {
+    padding: 4rem 0;
+  }
+  
+  .services h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    color: var(--blackColor);
+  }
+  
+  .services-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 3rem;
+    justify-content: center;
+  }
+  
+  .service-item {
+    flex: 1 1 300px;
+    max-width: 300px;
+    text-align: center;
+    padding: 2rem;
+    background: var(--greyBg);
+    border-radius: 8px;
+    transition: var(--transition);
+  }
+  
+  .service-item:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--boxShadow);
+  }
+  
+  .service-item .icon {
+    font-size: 3rem;
+    color: var(--PrimaryColor);
+  }
+  
+  .service-item h3 {
+    margin-top: 1.5rem;
+    font-size: 1.8rem;
+    color: var(--blackColor);
+  }
+  
+  .service-item p {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: var(--greyText);
+  }
+  
+  /* Video Section */
+  .video-section {
+    padding: 4rem 0;
+    text-align: center;
+    background: var(--greyBg);
+  }
+  
+  .video-section h2 {
+    font-size: 2.5rem;
+    color: var(--blackColor);
+  }
+  
+  .video-section video {
+    margin-top: 2rem;
+    max-width: 60%;
+    
+    border-radius: 8px;
+    box-shadow: var(--boxShadow);
+  }
+  
+  /* Team Section */
+  .team {
+    padding: 4rem 0;
+  }
+  
+  .team h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    color: var(--blackColor);
+  }
+  
+  .team-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 3rem;
+    justify-content: center;
+  }
+  
+  .team-member {
+    flex: 1 1 200px;
+    max-width: 200px;
+    text-align: center;
+  }
+  
+  .team-member img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: var(--boxShadow);
+  }
+  
+  .team-member h3 {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    color: var(--blackColor);
+  }
+  
+  .team-member p {
+    font-size: 1rem;
+    color: var(--greyText);
+  }
+  
+  /* Call-to-Action Section */
+  .cta-section {
+    position: relative;
+    height: 60vh;
+    overflow: hidden;
+    margin-top: 4rem;
+  }
+  
+  .cta-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .cta-section .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Slightly darker overlay for contrast */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .cta-section h2 {
+    font-size: 3rem;
+    color: white;
+    text-align: center;
+  }
+  
+  .cta-section p {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.607);
+    margin: 1rem 0 2rem;
+    text-align: center;
+  }
+  
+  .cta-section .btn {
+    font-size: 1.2rem;
+  }
+  
+  /* Responsive Design */
+  
+  /* Tablets */
+  @media (max-width: 992px) {
+    .hero-section h1 {
+      font-size: 3rem;
+    }
+  
+    .hero-section p {
+      font-size: 1.2rem;
+    }
+  
+    .services-grid,
+    .team-grid {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .service-item,
+    .team-member {
+      max-width: 80%;
+    }
+  
+    .video-section video {
+      max-width: 90%;
+    }
+  }
+  
+  /* Mobile Devices */
+  @media (max-width: 576px) {
+    .hero-section h1 {
+      font-size: 2rem;
+    }
+  
+    .hero-section p {
+      font-size: 1rem;
+    }
+  
+    .cta-section h2 {
+      font-size: 2rem;
+    }
+  
+    .cta-section p {
+      font-size: 1rem;
+    }
+  
+    .cta-section .btn {
+      font-size: 1rem;
+    }
+  }
+  

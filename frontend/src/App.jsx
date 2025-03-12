@@ -1,5 +1,8 @@
+// src/App.jsx
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -19,6 +22,12 @@ import Bookings from './Components/Bookings/Bookings';
 import BookingForm from './Components/BookingForm/BookingForm';
 import BookingConfirmation from './Components/BookingConfirmation/BookingConfirmation';
 import ProtectedRoute from './ProtectedRoute';
+
+import Contact from './Components/Contact/Contact'; 
+import Destinations from './Components/Destinations/Destinations.jsx';
+import Seats from './Components/Seats/Seats';
+import About from './Components/About/About.jsx';
+import FlightSearch from './Components/FlightSearch/FlightSearch.jsx';
 
 const App = () => {
   return (
@@ -45,6 +54,13 @@ const App = () => {
             }
           />
 
+          <Route path="/seats" element={<Seats />} />
+          <Route path="/destinations" element={<Destinations />} />
+          <Route path="/about" element={<About />} />
+          {/* Contact page route */}
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/flight-search" element={<FlightSearch />} />
+
           {/* Auth routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -69,7 +85,7 @@ const App = () => {
             }
           />
 
-          {/* Corrected booking form route */}
+          {/* Booking form route */}
           <Route
             path="/booking-form"
             element={

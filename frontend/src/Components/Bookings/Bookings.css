@@ -1,8 +1,9 @@
 /* Bookings.css */
+@import '../../main.css';
 
 .bookings.container {
   padding: 2rem;
-  margin-top: 200px;
+  margin-top: 100px;
 }
 
 .bookings h2 {
@@ -46,23 +47,23 @@
   font-size: 14px;
 }
 
-.download-btn {
+.action-buttons .download-btn {
   background-color: var(--PrimaryColor);
 }
 
-.download-btn:hover {
+.action-buttons .download-btn:hover {
   background-color: var(--HoverColor);
 }
 
-.cancel-btn {
-  background-color: #e74c3c;
+.action-buttons .cancel-btn {
+  background-color: #dc3545;
 }
 
-.cancel-btn:hover {
-  background-color: #c0392b;
+.action-buttons .cancel-btn:hover {
+  background-color: #c82333;
 }
 
-.cancelled-btn {
+.action-buttons .cancelled-btn {
   background-color: #7f8c8d; /* Grayish color for cancelled bookings */
   cursor: not-allowed;
 }

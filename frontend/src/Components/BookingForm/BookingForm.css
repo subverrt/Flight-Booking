@@ -4,7 +4,8 @@
 .booking-form-container {
   max-width: 800px;
   margin: 0 auto; /* Center the container */
-  margin-top: 200px; /* Default top margin for larger screens */
+  margin-top: 120px; /* Default top margin for larger screens */
+  margin-bottom: 20px;
   padding: 20px;
   background-color: var(--SecondaryColor);
   border-radius: 10px;
@@ -104,7 +105,7 @@
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   .booking-form-container {
-    margin-top: 150px; /* Adjusted top margin for medium screens */
+    margin-top: 120px; /* Adjusted top margin for medium screens */
     padding: 20px;
   }
 }
@@ -124,7 +125,7 @@
 
 @media (max-width: 480px) {
   .booking-form-container {
-    margin-top: 80px; /* Adjusted top margin for mobile devices */
+    margin-top: 75px; /* Adjusted top margin for mobile devices */
     padding: 10px;
   }
 

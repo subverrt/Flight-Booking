@@ -5,7 +5,7 @@
 .auth-container {
   padding: 2rem 1.5rem;
   max-width: 400px;
-  margin: 200px auto 2rem; /* Increased top margin to ensure the auth container is pushed below the navbar */
+  margin: 150px auto 2rem; /* Increased top margin to ensure the auth container is pushed below the navbar */
   text-align: center;
 }
 

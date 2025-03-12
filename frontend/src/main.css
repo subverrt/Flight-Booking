@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Spartan:wght@100..900&display=swap");
 /* ======================================================
    Base Variables & Global Styles
@@ -27,7 +28,7 @@
   --boxShadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
   --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   --glassEffect: rgba(255, 255, 255, 0);
-  --navBorder: transparent;
+  --navBorder:var(--borderColor);
 }
 
 .dark-mode {
@@ -156,57 +157,88 @@ body.dark-mode {
   color: #ffffff;
 }
 
-/* ======================================================
-   Navbar Component Base Styles
-   ====================================================== */
+/* Navbar styles using your PPTs and global variables */
 .navBar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background: var(--SecondaryColor);
-  padding: 1rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: var(--whiteColor);
   z-index: 1000;
   border-bottom: 1px solid var(--navBorder);
-  -webkit-backdrop-filter: blur(12px);
-          backdrop-filter: blur(12px);
-  /* Using rgba() to apply transparency */
-  background: rgba(var(--SecondaryColor), 0.8);
+  padding: 1.2rem 2rem;
+  /* ========== Breakpoints ========== */
+  /* Tablet/Mobile ≤768px */
+  /* Phone ≤480px */
+  /* Hide mobile toggle icon on screens >768px */
 }
 .navBar.navbar_With_Bg {
   box-shadow: var(--boxShadow);
-  padding: 0.5rem 2rem;
-  background: rgba(var(--SecondaryColor), 0.95);
+  padding: 1rem 2rem;
+  background: var(--whiteColor);
 }
 .navBar .navbarInner {
   width: 100%;
-  max-width: 1200px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* Site Logo & Company Name */
+  /* Slide-Down Menu (Mobile/Tablet) */
+  /* Right Section: Desktop Auth, Dark Mode Toggle, Mobile Toggle */
 }
-.navBar .navbarInner .logoDiv .Logo {
-  width: 120px;
-  filter: brightness(0.9);
+.navBar .navbarInner .logoDiv {
+  display: flex;
+  align-items: center;
+}
+.navBar .navbarInner .logoDiv .logoImg {
+  width: 60px;
+  height: auto;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.navBar .navbarInner .logoDiv .companyName {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--PrimaryColor);
+  margin-left: 1rem;
+  transition: color 0.3s ease;
+}
+.navBar .navbarInner .logoDiv .companyName:hover {
+  color: var(--HoverColor);
 }
 .navBar .navbarInner .menu {
   display: flex;
   align-items: center;
 }
-.navBar .navbarInner .menu ul.menuList {
+.navBar .navbarInner .menu .menuList {
   display: flex;
-  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* Hide mobile auth block on larger screens */
 }
-.navBar .navbarInner .menu ul.menuList li.listItem a {
+.navBar .navbarInner .menu .menuList .listItem {
+  margin-right: 2rem;
+}
+.navBar .navbarInner .menu .menuList .listItem:last-child {
+  margin-right: 0;
+}
+.navBar .navbarInner .menu .menuList .listItem a {
   color: var(--textColor);
-  padding: 0.5rem 1rem;
-  border-radius: 3rem;
+  font-weight: 600;
+  padding: 0.5rem 0;
   position: relative;
+  line-height: 1;
+  transition: color 0.3s ease;
 }
-.navBar .navbarInner .menu ul.menuList li.listItem a::after {
+.navBar .navbarInner .menu .menuList .listItem a:hover {
+  color: var(--PrimaryColor);
+  background: transparent;
+}
+.navBar .navbarInner .menu .menuList .listItem a:hover::after {
+  width: 100%;
+}
+.navBar .navbarInner .menu .menuList .listItem a::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -216,59 +248,37 @@ body.dark-mode {
   background: var(--PrimaryColor);
   transition: width var(--transition);
 }
-.navBar .navbarInner .menu ul.menuList li.listItem a:hover {
-  color: var(--PrimaryColor);
-  background: transparent;
-}
-.navBar .navbarInner .menu ul.menuList li.listItem a:hover::after {
-  width: 100%;
-}
-@media (max-width: 768px) {
-  .navBar .navbarInner .menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: var(--SecondaryColor);
-    flex-direction: column;
-    display: none;
-    padding: 1rem;
-    box-shadow: var(--boxShadow);
-  }
-  .navBar .navbarInner .menu.active {
-    display: flex;
-  }
+.navBar .navbarInner .menu .menuList .mobile-auth {
+  display: none;
 }
 .navBar .navbarInner .rightSection {
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  /* Desktop Auth Block (hidden on mobile) */
+  /* Mobile Toggle Icon */
 }
 .navBar .navbarInner .rightSection .dark-mode-toggle {
-  background: var(--PrimaryColor);
-  color: var(--whiteColor);
+  background: none;
   border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 3rem;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  color: var(--textColor);
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
 }
 .navBar .navbarInner .rightSection .dark-mode-toggle:hover {
-  background: var(--HoverColor);
+  color: var(--PrimaryColor);
 }
-.navBar .navbarInner .rightSection .auth .userProfile {
-  /* Arrange avatar and greeting in a column */
+.navBar .navbarInner .rightSection .auth.desktop-auth {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  cursor: pointer;
-  position: relative;
-  gap: 0.3rem;
+  gap: 1rem;
 }
-.navBar .navbarInner .rightSection .auth .userProfile .avatar {
-  /* Make the avatar fully round with fixed dimensions */
+.navBar .navbarInner .rightSection .auth.desktop-auth .userProfile {
+  display: flex;
+  align-items: center;
+}
+.navBar .navbarInner .rightSection .auth.desktop-auth .userProfile .avatar {
   width: 40px;
   height: 40px;
   background: var(--PrimaryColor);
@@ -277,170 +287,200 @@ body.dark-mode {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 1rem;
-  box-shadow: 0 4px 6px var(--glassEffect);
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-right: 0.75rem;
 }
-.navBar .navbarInner .rightSection .auth .userProfile .userGreeting {
-  font-size: 0.85rem;
-  color: var(--textColor);
-}
-.navBar .navbarInner .rightSection .auth .userProfile .logout-button {
+.navBar .navbarInner .rightSection .auth.desktop-auth .userProfile .logoutButton {
   background: var(--PrimaryColor);
   color: var(--whiteColor);
-  padding: 0.4rem 0.8rem;
+  padding: 0.6rem 1.2rem;
   border: none;
-  border-radius: 3rem;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 0.9rem;
-  margin-top: 0.3rem;
-  transition: background var(--transition);
+  font-size: 1rem;
+  box-shadow: var(--boxShadow);
+  transition: background 0.3s ease;
 }
-.navBar .navbarInner .rightSection .auth .userProfile .logout-button:hover {
+.navBar .navbarInner .rightSection .auth.desktop-auth .userProfile .logoutButton:hover {
   background: var(--HoverColor);
 }
-.navBar .navbarInner .rightSection .auth .nav-link {
+.navBar .navbarInner .rightSection .auth.desktop-auth .authLinks {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.navBar .navbarInner .rightSection .auth.desktop-auth .authLinks .navLink {
   text-decoration: none;
   color: var(--textColor);
-  padding: 0.5rem 1rem;
-  border-radius: 3rem;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
   transition: var(--transition);
 }
-.navBar .navbarInner .rightSection .auth .nav-link:hover {
+.navBar .navbarInner .rightSection .auth.desktop-auth .authLinks .navLink:hover {
   background: var(--PrimaryColor);
   color: var(--whiteColor);
 }
+.navBar .navbarInner .rightSection .toggleIcon {
+  display: block;
+  cursor: pointer;
+}
+.navBar .navbarInner .rightSection .toggleIcon .toggleAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--PrimaryColor);
+  color: var(--whiteColor);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
 .navBar .navbarInner .rightSection .toggleIcon .icon {
-  color: var(--blackColor);
+  font-size: 1.5rem;
+  color: var(--textColor);
 }
 @media (max-width: 1200px) {
   .navBar {
-    padding: 1rem;
+    padding: 1.2rem 1.5rem;
   }
-  .navBar .navbarInner {
-    max-width: 100%;
+  .navBar .navbarInner .menuList .listItem {
+    margin-right: 1.5rem;
   }
-  .navBar .navbarInner .menu ul.menuList {
-    gap: 1rem;
+}
+@media (max-width: 1024px) {
+  .navBar .navbarInner .logoDiv .companyName {
+    display: inline; /* Previously hidden; now visible */
+    font-size: 1.5rem; /* Adjusted size for smaller screens */
+    margin-left: 0.5rem; /* Optional adjustment */
   }
 }
 @media (max-width: 992px) {
-  .navBar .navbarInner .logoDiv .Logo {
-    width: 100px;
+  .navBar .navbarInner .menuList .listItem {
+    margin-right: 1rem;
   }
-  .navBar .navbarInner .menu ul.menuList {
-    gap: 0.75rem;
-  }
-  .navBar .navbarInner .menu ul.menuList li.listItem a {
-    padding: 0.5rem;
-  }
-  .navBar .navbarInner .rightSection {
+  .navBar .rightSection {
     gap: 1rem;
   }
 }
 @media (max-width: 768px) {
   .navBar {
-    padding: 0.75rem 1rem;
+    padding: 1.2rem 1rem;
   }
-  .navBar .navbarInner .logoDiv .Logo {
-    width: 90px;
+  .navBar.navbar_With_Bg {
+    box-shadow: none;
+    padding: 1.2rem 1rem;
+    background: var(--whiteColor);
   }
-  .navBar .navbarInner .menu {
-    width: 100%;
-    top: calc(100% - 1px);
-    padding: 0;
+  .navBar .navbarInner {
+    /* Hide desktop auth on mobile */
   }
-  .navBar .navbarInner .menu ul.menuList {
-    flex-direction: column;
-    width: 100%;
-    padding: 1rem 0;
-    gap: 0;
-  }
-  .navBar .navbarInner .menu ul.menuList li.listItem {
-    width: 100%;
-    text-align: center;
-    padding: 0.5rem 0;
-  }
-  .navBar .navbarInner .menu ul.menuList li.listItem a {
-    width: 100%;
-    display: block;
-    padding: 1rem;
-    border-radius: 0;
-  }
-  .navBar .navbarInner .menu ul.menuList li.listItem a::after {
+  .navBar .navbarInner .auth.desktop-auth {
     display: none;
   }
-  .navBar .navbarInner .menu ul.menuList li.listItem a:hover {
+  .navBar .navbarInner .menu {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background: var(--SecondaryColor);
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    box-shadow: var(--boxShadow);
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 999;
+  }
+  .navBar .navbarInner .menu.active {
+    transform: translateY(0);
+    visibility: visible;
+    opacity: 1;
+  }
+  .navBar .navbarInner .menu .menuList {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    margin: 0;
+    padding: 0;
+  }
+  .navBar .navbarInner .menu .menuList .listItem {
+    margin: 0;
+  }
+  .navBar .navbarInner .menu .menuList .listItem a {
+    font-size: 1.2rem;
+    line-height: 1.4;
+    padding: 0.75rem 1.2rem;
+    display: inline-block;
+    text-align: center;
+  }
+  .navBar .navbarInner .menu .menuList .listItem.mobile-auth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    border-top: 1px solid var(--navBorder);
+    padding-top: 1rem;
+  }
+  .navBar .navbarInner .menu .menuList .listItem.mobile-auth .logoutButton {
+    background: var(--PrimaryColor);
+    color: var(--whiteColor);
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: var(--boxShadow);
+    transition: background 0.3s ease;
+  }
+  .navBar .navbarInner .menu .menuList .listItem.mobile-auth .logoutButton:hover {
+    background: var(--HoverColor);
+  }
+  .navBar .navbarInner .menu .menuList .listItem.mobile-auth .navLink {
+    text-decoration: none;
+    color: var(--textColor);
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    transition: var(--transition);
+  }
+  .navBar .navbarInner .menu .menuList .listItem.mobile-auth .navLink:hover {
     background: var(--PrimaryColor);
     color: var(--whiteColor);
   }
-  .navBar .navbarInner .rightSection {
-    gap: 0.75rem;
-  }
-  .navBar .navbarInner .rightSection .dark-mode-toggle {
-    padding: 0.5rem;
-  }
-  .navBar .navbarInner .rightSection .dark-mode-toggle span {
-    display: none;
-  }
-  .navBar .navbarInner .rightSection .auth .userProfile .userGreeting {
-    display: none;
-  }
-  .navBar .navbarInner .rightSection .auth .userProfile .logout-button {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    margin-top: 0.5rem;
-  }
-  .navBar .navbarInner .rightSection .auth .nav-link {
-    padding: 0.5rem;
-  }
-  .navBar .navbarInner .rightSection .toggleIcon .icon {
-    font-size: 1.5rem;
+  .navBar .navbarInner .rightSection .toggleIcon {
+    display: block;
   }
 }
 @media (max-width: 480px) {
   .navBar {
-    padding: 0.5rem;
-  }
-  .navBar .navbarInner .logoDiv .Logo {
-    width: 80px;
+    padding: 0.6rem 0.5rem;
   }
   .navBar .navbarInner .rightSection {
     gap: 0.5rem;
   }
-  .navBar .navbarInner .rightSection .auth .userProfile .avatar {
+  .navBar .navbarInner .rightSection .toggleIcon .toggleAvatar {
     width: 35px;
     height: 35px;
-    font-size: 0.9rem;
-  }
-  .navBar .navbarInner .rightSection .auth .nav-link {
-    font-size: 0.85rem;
-    padding: 0.4rem;
+    font-size: 1.1rem;
   }
   .navBar .navbarInner .rightSection .toggleIcon .icon {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
 }
-
-@media (max-width: 360px) {
-  .navBar .navbarInner .rightSection .dark-mode-toggle {
-    padding: 0.4rem;
-  }
-  .navBar .navbarInner .rightSection .auth .nav-link {
-    font-size: 0.8rem;
-  }
-}
-/* ------------------------------------------------------
-     Hide mobile menu toggle (the .toggleIcon) on large screens
-     ------------------------------------------------------ */
 @media (min-width: 769px) {
-  .toggleIcon {
+  .navBar .rightSection .toggleIcon {
     display: none;
   }
 }
+
 .home {
-  padding-top: 10rem;
+  padding-top: 8rem;
   text-align: center;
   gap: 2rem;
   flex-direction: column;
@@ -518,6 +558,7 @@ body.dark-mode {
   width: 100%;
   display: grid;
   gap: 1.5rem;
+  margin-top: 20px;
 }
 .search .searchInputs .singleInput {
   display: flex;
@@ -737,6 +778,7 @@ body.dark-mode {
 
 .travelers .sectionContainer {
   text-align: center;
+  margin-bottom: 20px;
 }
 
 .travelers .sectionContainer .travelersContainer {
@@ -994,7 +1036,7 @@ body.dark-mode {
 
 @media screen and (min-width: 480px) {
   .home {
-    padding-top: 12rem;
+    padding-top: 8rem;
   }
   .travelers .sectionContainer .travelersContainer {
     grid-template-columns: repeat(2, 1fr);
@@ -1108,13 +1150,13 @@ body.dark-mode {
     margin: 0 auto;
   }
   .auth-container {
-    margin: 2rem 1rem;
+    margin-top: 150px;
     padding: 1.5rem;
   }
 }
 @media screen and (min-width: 960px) {
   .home {
-    padding-top: 13rem;
+    padding-top: 11rem;
   }
   .home .mainText {
     width: 70%;
