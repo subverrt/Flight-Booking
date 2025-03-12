@@ -11,7 +11,7 @@ import Subscribe from '../Subscribers/Subscribe';
 import parisImage from '../../assets/paris2.jpg';      // Replace with your own image
 import tokyoImage from '../../assets/tokyo.jpg';      // Replace with your own image
 import sydneyImage from '../../assets/sydney.jpg';    // Replace with your own image
-import newYorkImage from '../../assets/newyork.jpg';  // Replace with your own image
+import newYorkImage from '../../assets/NewYork.jpg';  // Replace with your own image
 import capeTownImage from '../../assets/capetown.jpg';// Replace with your own image
 
 const Destinations = () => {
