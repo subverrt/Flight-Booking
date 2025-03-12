@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import imageGrid from '../../assets/images-Grid2.png'
+import imageGrid2 from '../../assets/images-Grid2.png'
 
 import Aos from 'aos'
 import 'aos/dist/aos.css'
@@ -16,7 +16,7 @@ const Lounge = () => {
       <div className="sectionContainer grid">
 
         <div data-aos='fade-down' data-aos-duration='2500' className="imgDiv">
-          <img src={imageGrid}/>
+          <img src={imageGrid2}/>
         </div>
 
         <div className="textDiv">
