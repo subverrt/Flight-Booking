@@ -11,7 +11,7 @@ const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
-app.use(cors({ credentials: true, origin: 'http://localhost:5173' }));
+app.use(cors({ credentials: true, origin: 'https://flyhigh-two.vercel.app' }));
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI)

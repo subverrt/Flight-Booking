@@ -94,7 +94,7 @@ const Footer = () => {
               <a href='#'>Careers</a>
             </li>
             <li>
-              <a href='#'>ortation</a>
+              <a href='#'>Transportation</a>
             </li>
             <li>
               <a href='#'>Programme Rules</a>
