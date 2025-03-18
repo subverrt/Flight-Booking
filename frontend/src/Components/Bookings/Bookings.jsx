@@ -20,7 +20,7 @@ const Bookings = () => {
       const token = localStorage.getItem('token');
       console.log('Token obtained from localStorage:', token);
       try {
-        const response = await fetch('http://localhost:5000/api/users/bookings', {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/bookings`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await response.json();
@@ -44,7 +44,7 @@ const Bookings = () => {
   const cancelBooking = async (bookingId) => {
     const token = localStorage.getItem('token');
     try {
-      const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+      const baseURL = import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_API_BASE_URL}`;
       const response = await axios.delete(`${baseURL}/bookings/cancel/${bookingId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });

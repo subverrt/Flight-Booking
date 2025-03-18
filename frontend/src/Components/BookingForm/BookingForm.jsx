@@ -48,7 +48,7 @@ const BookingForm = () => {
   // Initiate payment process: create booking, load Razorpay, and open checkout
   const initiatePayment = async () => {
     try {
-      const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+      const baseURL = import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_API_BASE_URL}`;
       const token = localStorage.getItem('token');
       if (!token) {
         console.error('No token found in localStorage.');

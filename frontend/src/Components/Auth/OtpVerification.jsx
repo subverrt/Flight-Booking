@@ -21,7 +21,7 @@ const OtpVerification = () => {
 
       console.log('Sending data:', { email, otp });
 
-      const res = await fetch('http://localhost:5000/api/auth/verify-otp', {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp }),

@@ -15,7 +15,7 @@ const BookingConfirmation = () => {
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
-        const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+        const baseURL = import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_API_BASE_URL}`;
         const token = localStorage.getItem('token');
         const response = await axios.get(`${baseURL}/bookings/${bookingId}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -33,7 +33,7 @@ const BookingConfirmation = () => {
 
   const cancelBooking = async () => {
     try {
-      const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+      const baseURL = import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_API_BASE_URL}`;
       const token = localStorage.getItem('token');
       const response = await axios.delete(`${baseURL}/bookings/cancel/${bookingId}`, {
         headers: { Authorization: `Bearer ${token}` },

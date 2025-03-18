@@ -53,7 +53,7 @@ const FlightSearch = () => {
       passengers: travellers,
     });
     try {
-      const requestUrl = `http://localhost:5000/api/flights/search?${params.toString()}`;
+      const requestUrl = `${import.meta.env.VITE_API_BASE_URL}/flights/search?${params.toString()}`;
       const response = await fetch(requestUrl);
       const data = await response.json();
       if (response.ok) {
