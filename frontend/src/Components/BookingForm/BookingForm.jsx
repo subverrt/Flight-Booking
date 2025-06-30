@@ -73,7 +73,7 @@ const BookingForm = () => {
 
       // Create a booking with the flight, selected seats, passengers, and calculated total amount
       const response = await axios.post(
-        `${baseURL}/bookings/create`,
+        `${baseURL}/api/bookings/create`,
         bookingPayload,
         {
           headers: { Authorization: `Bearer ${token}` },
