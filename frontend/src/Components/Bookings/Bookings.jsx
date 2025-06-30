@@ -19,7 +19,7 @@ const Bookings = () => {
       const token = localStorage.getItem('token');
       console.log('Token obtained from localStorage:', token);
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/bookings`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/users/bookings`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await response.json();
