@@ -13,7 +13,7 @@ const SeatSelection = ({ flightId, bookedClass, onSeatSelect }) => {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/flights/${flightId}/seatmap`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/flights/${flightId}/seatmap`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
