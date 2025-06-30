@@ -35,7 +35,7 @@ const BookingConfirmation = () => {
     try {
       const baseURL = import.meta.env.VITE_API_BASE_URL || `${import.meta.env.VITE_API_BASE_URL}`;
       const token = localStorage.getItem('token');
-      const response = await axios.delete(`${baseURL}/bookings/cancel/${bookingId}`, {
+      const response = await axios.delete(`${baseURL}/api/bookings/cancel/${bookingId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert(response.data.message);
