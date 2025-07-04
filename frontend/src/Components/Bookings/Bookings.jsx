@@ -109,7 +109,7 @@ const Bookings = () => {
       doc.setFontSize(22);
       doc.setTextColor(0, 0, 0);
       doc.text('Flight Ticket', pageWidth / 2, titleY, { align: 'center' });
-      currentY = titleY + 25;
+      currentY = titleY + 30;
 
       // Flight details
       doc.setFontSize(12);
@@ -143,7 +143,7 @@ const Bookings = () => {
       const qrImageWidth = 100;
       const qrImageHeight = 100;
       const qrX = pageWidth - qrImageWidth - marginRight;
-      const qrY = marginTop + 40;
+      const qrY = marginTop + 50;
       doc.addImage(qrDataURL, 'PNG', qrX, qrY, qrImageWidth, qrImageHeight);
 
       // Draw separator line
