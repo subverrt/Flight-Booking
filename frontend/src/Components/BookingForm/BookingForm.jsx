@@ -94,7 +94,7 @@ const BookingForm = () => {
         handler: async (razorpayResponse) => {
           try {
             await axios.post(
-              `${baseURL}/api/auth/bookings/verify`,
+              `${baseURL}/api/bookings/verify`,
               {
                 razorpayPaymentId: razorpayResponse.razorpay_payment_id,
                 razorpayOrderId: razorpayResponse.razorpay_order_id,
