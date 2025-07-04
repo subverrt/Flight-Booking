@@ -143,7 +143,7 @@ const Bookings = () => {
       const qrImageWidth = 100;
       const qrImageHeight = 100;
       const qrX = pageWidth - qrImageWidth - marginRight;
-      const qrY = marginTop + 30;
+      const qrY = marginTop + 40;
       doc.addImage(qrDataURL, 'PNG', qrX, qrY, qrImageWidth, qrImageHeight);
 
       // Draw separator line
