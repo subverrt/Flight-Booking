@@ -109,7 +109,7 @@ const Bookings = () => {
       doc.setFontSize(22);
       doc.setTextColor(0, 0, 0);
       doc.text('Flight Ticket', pageWidth / 2, titleY, { align: 'center' });
-      currentY = titleY + 30;
+      currentY = titleY + 25;
 
       // Flight details
       doc.setFontSize(12);
